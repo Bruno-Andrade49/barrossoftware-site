@@ -84,7 +84,7 @@ export function Services() {
               </span>
               <span
                 aria-hidden="true"
-                className="text-[76px] leading-[0.8] font-normal tracking-[-0.06em] text-white/[0.07] [font-family:var(--font-display)] md:hidden"
+                className="text-[76px] leading-[0.8] font-medium tracking-[-0.06em] text-white/[0.07] [font-family:var(--font-display)] md:hidden"
               >
                 {s.number}
               </span>

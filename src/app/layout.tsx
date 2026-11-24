@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Inter_Tight, Zalando_Sans_Expanded } from "next/font/google";
+import { IBM_Plex_Mono, Inter_Tight, Space_Grotesk } from "next/font/google";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { SmoothScroll } from "@/components/SmoothScroll";
@@ -19,11 +19,11 @@ const interTight = Inter_Tight({
   weight: ["300", "400", "500", "600"],
 });
 
-// Títulos: grotesca expandida, larga e técnica (contrasta com o corpo em Inter Tight)
-const zalando = Zalando_Sans_Expanded({
-  variable: "--font-zalando",
-  adjustFontFallback: false, // não há métricas de fallback para ela
+// Títulos: grotesca de desenho técnico (combina com os rótulos mono); texto corrido em Inter Tight
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -60,7 +60,7 @@ const themeScript = `try{var t=localStorage.getItem("theme");if(t==="light")docu
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className={`${plexMono.variable} ${interTight.variable} ${zalando.variable}`} suppressHydrationWarning>
+    <html lang="pt-BR" className={`${plexMono.variable} ${interTight.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

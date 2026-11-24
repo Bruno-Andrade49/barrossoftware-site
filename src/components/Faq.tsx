@@ -22,7 +22,7 @@ export function Faq() {
           </div>
           <h2
             id="perguntas-titulo"
-            className="mt-8 text-[clamp(40px,4.6vw,80px)] leading-[0.98] font-normal tracking-[-0.042em]"
+            className="mt-8 text-[clamp(40px,4.6vw,80px)] leading-[0.98] font-medium tracking-[-0.042em]"
           >
             Antes de
             <br />
@@ -38,7 +38,7 @@ export function Faq() {
             <details key={f.q} className="group border-b border-white/10" name="perguntas">
               <summary className="flex cursor-pointer list-none items-start gap-5 py-6 [&::-webkit-details-marker]:hidden">
                 <span className="mono-label mt-2 w-6 shrink-0 text-carmim-light">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="flex-1 text-[clamp(20px,1.8vw,28px)] leading-[1.2] font-normal tracking-[-0.03em]">{f.q}</h3>
+                <h3 className="flex-1 text-[clamp(20px,1.8vw,28px)] leading-[1.2] font-medium tracking-[-0.03em]">{f.q}</h3>
                 <span
                   aria-hidden="true"
                   className="relative mt-2 size-4 shrink-0 transition-transform duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] group-open:rotate-45"

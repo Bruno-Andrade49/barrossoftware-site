@@ -189,7 +189,7 @@ export function Hero() {
           <h1
             id="hero-titulo"
             aria-label="Move negócios."
-            className="min-w-0 text-[min(17.5vw,13svh)] leading-[0.86] font-normal tracking-[-0.05em] md:col-span-8 md:text-[clamp(60px,min(10vw,17vh),168px)] md:leading-[0.84]"
+            className="min-w-0 text-[min(20vw,14svh)] leading-[0.86] font-medium tracking-[-0.05em] md:col-span-8 md:text-[clamp(64px,min(11vw,19vh),188px)] md:leading-[0.84]"
           >
             <span className="line-mask block">
               <span ref={line1} className="block" aria-hidden="true">

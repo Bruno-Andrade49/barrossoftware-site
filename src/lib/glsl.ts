@@ -123,23 +123,29 @@ export const forms = /* glsl */ `
       return vec4(g.xy + q, 0.0, mix(0.35, 0.8, 1.0 - ofs / 0.062));
     }
     if (f == 6) {
-      // anel inclinado orbitando o título do contato
-      float a = hsh(seed, 4.1) * 6.2831 + t * (0.1 + hsh(seed, 6.2) * 0.08);
-      float r = 0.96 + (hsh(seed, 2.7) - 0.5) * 0.1;
-      float tilt = 0.34;
-      vec3 q = vec3(cos(a) * r, 0.0, sin(a) * r);
-      q = vec3(q.x, -q.z * sin(tilt), q.z * cos(tilt));
-      float rot = -0.18;
-      vec2 xy = vec2(q.x * cos(rot) - q.y * sin(rot), q.x * sin(rot) + q.y * cos(rot));
-      // anel justo ao título (não cruza o texto de apoio embaixo)
-      vec2 scale = vec2(g.z * 0.5, min(g.z * 0.5, g.w * 1.35));
-      return vec4(g.xy + xy * scale, q.z, mix(0.03, 0.28, smoothstep(-0.9, 0.9, q.z)));
+      // contato: horizonte de linhas — fileiras que ondulam como um relevo, mais altas no centro
+      // e mais juntas ao fundo (perspectiva); cada partícula corre ao longo da sua fileira
+      float rows = 22.0;
+      float row = floor(hsh(seed, 4.1) * rows);
+      float depth = row / (rows - 1.0); // 0 = frente (embaixo), 1 = fundo (em cima)
+      float u = fract(hsh(seed, 2.7) + t * (0.012 + hsh(seed, 6.2) * 0.012));
+      float cx = u * 2.0 - 1.0;
+      float env = exp(-cx * cx * 2.2);
+      // fases que mudam pouco de uma fileira para a outra: as linhas formam uma superfície contínua
+      float wave = sin(u * 5.5 + row * 0.42 + t * 0.28) * 0.6 + sin(u * 11.0 - row * 0.3 + t * 0.4) * 0.25
+                 + sin(u * 2.2 + row * 0.18 - t * 0.2) * 0.15;
+      float yRow = g.y - g.w * 0.5 + pow(depth, 0.75) * g.w * 0.92;
+      float amp = g.w * 0.34 * (1.0 - depth * 0.5) * env;
+      vec2 pos = vec2(g.x - g.z * 0.5 + u * g.z, yRow + (wave * 0.5 + 0.5) * amp);
+      float fade = smoothstep(0.0, 0.16, u) * smoothstep(1.0, 0.84, u);
+      return vec4(pos, depth, fade * mix(0.3, 0.05, depth) * (0.2 + env * 0.8));
     }
     if (f == 7) {
       // BARROS: pontos amostrados do texto, com um leve tremor para as linhas aparecerem
       vec4 w = texture2D(uWord, uv);
       float j = seed * 40.0;
-      vec2 jit = vec2(cos(t * 5.0 + j), sin(t * 4.3 + j)) * 0.004;
+      // tremor proporcional ao tamanho das letras (no celular a palavra é menor e o tremor borrava)
+      vec2 jit = vec2(cos(t * 5.0 + j), sin(t * 4.3 + j)) * 0.004 * clamp(g.w / 0.6, 0.25, 1.0);
       vec2 pos = vec2(g.x - g.z * 0.5 + w.x * g.z, g.y + g.w * 0.5 - w.y * g.w) + jit;
       return vec4(pos, 0.0, 1.7);
     }

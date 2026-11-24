@@ -47,7 +47,7 @@
 
   /* Fontes */
   --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-display: var(--font-zalando), var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
 
   /* Escala tipográfica (fluida no mobile) */
@@ -90,7 +90,7 @@
 }
 
 @layer base {
-  /* títulos na fonte expandida; as alternativas do Inter (ss01/cv11) não valem para ela */
+  /* títulos em Space Grotesk; as alternativas do Inter (ss01/cv11) não valem para ela */
   h1,
   h2,
   h3 {
@@ -156,7 +156,7 @@
   /* Display condensado e pesado (títulos de impacto) */
   .display {
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 500;
     line-height: 0.95;
     letter-spacing: -0.045em;
   }

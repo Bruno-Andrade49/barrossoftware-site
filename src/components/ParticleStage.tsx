@@ -110,9 +110,18 @@ const velocityShader = /* glsl */ `
     float b;
     if (phase > 1.5) {
       desired = desiredFor(uFormB, ps, layer, seed, uv);
-      // quem acabou de entrar pela borda ainda chega com embalo
-      if (moving > 0.5 && wrappedNow(z) && bound(uFormB) > 0.5) desired.x += uDir * 1.6 * (1.0 - smoothstep(0.0, 0.8, wrapAge(z, tt)));
       b = bound(uFormB);
+      if (moving > 0.5 && b > 0.5) {
+        // chegada suave numa forma presa: a velocidade máxima começa baixa e sobe aos poucos,
+        // então as linhas deslizam até o lugar em vez de cruzar a tela num risco (ex.: forma ainda
+        // abaixo da tela quando a seção começa)
+        float ia = wrappedNow(z) ? wrapAge(z, tt) : tt - dep - 2.4;
+        if (wrappedNow(z)) desired.x += uDir * 0.6 * (1.0 - smoothstep(0.0, 0.8, ia));
+        float vmax = mix(0.6, 6.0, smoothstep(0.2, 2.6, ia));
+        float dl = length(desired);
+        if (dl > vmax) desired *= vmax / dl;
+        b *= smoothstep(0.0, 1.6, ia);
+      }
     } else if (phase > 0.5) {
       // atravessando: um vento lateral; cada linha mantém a altura em que estava
       // (quem já tinha saído da tela com o scroll sai pela lateral sem ser puxado de volta)
@@ -216,7 +225,9 @@ const lineVertex = /* glsl */ `
     }
     if (abs(f - 3.0) < 0.5) return mix(0.03, 0.26, layer * layer);
     vec4 T = formAt(int(f + 0.5), seed, aRef, uTime);
-    return 0.15 * T.w * mix(0.6, 1.0, layer) * uGain;
+    // a palavra do rodapé já é densa: sem o reforço de brilho do celular, para não borrar as letras
+    float gain = f > 6.5 ? min(uGain, 1.7) : uGain;
+    return 0.15 * T.w * mix(0.6, 1.0, layer) * gain;
   }
 
   void main() {
@@ -251,7 +262,8 @@ const lineVertex = /* glsl */ `
         a = aB;
       }
     } else if (phase > 0.5) {
-      a = mix(alphaFor(uFormA, P, layer, seed), aT, smoothstep(0.0, 0.35, tt - dep));
+      // saindo de uma seção sem partículas (trabalhos): a travessia fica invisível; elas só aparecem ao chegar
+      a = uFormA > 8.5 ? 0.0 : mix(alphaFor(uFormA, P, layer, seed), aT, smoothstep(0.0, 0.35, tt - dep));
     } else {
       a = alphaFor(uFormA, P, layer, seed);
     }
@@ -513,6 +525,16 @@ export function ParticleStage() {
           candidate = k === activeIdx || clear || gap || activeIdx < 0 ? k : activeIdx;
         }
       }
+      // forma presa (esfera, cabo, relevo): só assume quando o centro da área dela já está na tela.
+      // Senão as partículas mergulhariam atrás de um alvo fora da tela, num risco vertical.
+      if (candidate >= 0 && candidate !== activeIdx && activeIdx >= 0) {
+        const s = secs[candidate];
+        if (!isFree(s.form) && s.anchor !== s.el) {
+          const r = s.anchor.getBoundingClientRect();
+          const cy = r.top + r.height / 2;
+          if (cy > H * 0.82 || cy < H * 0.12) candidate = activeIdx;
+        }
+      }
       // o rodapé nunca chega ao meio da tela: vale ao chegar perto do fim da página
       const remaining = document.documentElement.scrollHeight - (window.scrollY + H);
       const last = secs.length - 1;
@@ -602,7 +624,7 @@ export function ParticleStage() {
       const A = shared.uFormA.value;
       const B = shared.uFormB.value;
       // travessia terminada: todas as partículas já estão na forma nova
-      if (A !== B && t - shared.uTransStart.value > 3.4) shared.uFormA.value = B;
+      if (A !== B && t - shared.uTransStart.value > 5.5) shared.uFormA.value = B;
       const moving = shared.uFormA.value !== B;
       pu.uWrap.value = isFree(B) || (moving && isFree(A)) ? 1 : 0;
 

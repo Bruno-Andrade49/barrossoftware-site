@@ -31,7 +31,7 @@ export function About() {
 
         <h2
           id="estudio-titulo"
-          className="mt-10 text-[clamp(40px,4.6vw,76px)] leading-[0.98] font-normal tracking-[-0.042em]"
+          className="mt-10 text-[clamp(40px,4.6vw,76px)] leading-[0.98] font-medium tracking-[-0.042em]"
         >
           Um estúdio pequeno,
           <br />

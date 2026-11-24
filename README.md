@@ -121,7 +121,7 @@ Blocos de texto que ainda começam com `PREENCHER` não aparecem na página. Ass
 | Animação | [GSAP 3.13](https://gsap.com) (ScrollTrigger, SplitText, ScrambleText) | Entradas, trilha horizontal, pilha de cartões, menu |
 | Scroll | [Lenis](https://lenis.darkroom.engineering) | Scroll suave sincronizado com o GSAP |
 | 3D / GPU | [three.js r170](https://threejs.org) (`GPUComputationRenderer`) | Simulação e desenho das partículas |
-| Fontes | Zalando Sans Expanded, Inter Tight, IBM Plex Mono | Títulos, texto e rótulos |
+| Fontes | Space Grotesk, Inter Tight, IBM Plex Mono | Títulos, texto e rótulos |
 
 ---
 

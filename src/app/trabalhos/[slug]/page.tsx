@@ -162,7 +162,7 @@ export default async function CasePage({ params }: PageProps) {
             {blocks.map((b, i) => (
               <div key={b.label}>
                 <p className="mono-label text-carmim-light">{pad(i + 1)}</p>
-                <h2 className="mt-4 text-[clamp(26px,2.2vw,36px)] leading-[1.05] font-normal tracking-[-0.04em]">{b.label}</h2>
+                <h2 className="mt-4 text-[clamp(26px,2.2vw,36px)] leading-[1.05] font-medium tracking-[-0.04em]">{b.label}</h2>
                 <div className="mt-5 max-w-[420px] text-[17px] leading-[1.6] font-light text-mist">{b.body}</div>
               </div>
             ))}
@@ -176,7 +176,7 @@ export default async function CasePage({ params }: PageProps) {
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <h2
               id="telas-titulo"
-              className="text-[clamp(36px,4.4vw,72px)] leading-[0.98] font-normal tracking-[-0.042em]"
+              className="text-[clamp(36px,4.4vw,72px)] leading-[0.98] font-medium tracking-[-0.042em]"
             >
               Por dentro
               <br />
@@ -211,7 +211,7 @@ export default async function CasePage({ params }: PageProps) {
 
       {/* Contato */}
       <section className="px-4 py-28 text-center md:px-12 md:py-40">
-        <h2 className="text-[clamp(36px,4.8vw,80px)] leading-[0.98] font-normal tracking-[-0.045em]">
+        <h2 className="text-[clamp(36px,4.8vw,80px)] leading-[0.98] font-medium tracking-[-0.045em]">
           Quer um projeto
           <br />
           assim<span className="text-carmim">?</span>

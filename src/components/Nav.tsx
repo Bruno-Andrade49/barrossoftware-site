@@ -144,7 +144,7 @@ export function Nav() {
             >
               <span data-menu-item className="flex items-center gap-4 py-5">
                 <span className="mono-label w-6 text-carmim-light">0{i + 1}</span>
-                <span className="flex-1 text-[clamp(36px,11vw,52px)] leading-none font-normal tracking-[-0.045em] [font-family:var(--font-display)]">
+                <span className="flex-1 text-[clamp(36px,11vw,52px)] leading-none font-medium tracking-[-0.045em] [font-family:var(--font-display)]">
                   {item.label}
                 </span>
                 <span aria-hidden="true" className="text-ash transition-transform duration-300 group-active:translate-x-1">

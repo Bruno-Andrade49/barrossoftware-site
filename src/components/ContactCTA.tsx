@@ -5,7 +5,10 @@ import { site, whatsappUrl } from "@/content/site";
 import { LocalClock } from "./LocalClock";
 import { Reveal } from "./Reveal";
 
-/** Contato: composição centrada; as partículas (forma "halo") orbitam o título num anel inclinado. */
+/**
+ * Contato: composição centrada. As partículas (forma "halo") viram um horizonte de linhas que
+ * ondulam no pé da seção, como um relevo, sem passar por cima do texto.
+ */
 export function ContactCTA() {
   const [copied, setCopied] = useState(false);
 
@@ -26,7 +29,13 @@ export function ContactCTA() {
       className="relative flex min-h-[100svh] flex-col justify-center px-5 py-28 md:px-12 md:py-32"
       aria-labelledby="contato-titulo"
     >
-      <Reveal className="mx-auto flex w-full max-w-[1100px] flex-col items-center text-center">
+      {/* Área do horizonte de partículas: faixa no pé da seção */}
+      <div
+        data-anchor
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] md:inset-x-[-4%] md:h-[34%]"
+      />
+      <Reveal className="relative mx-auto flex w-full max-w-[1100px] flex-col items-center text-center">
         <p className="mono-label flex items-center gap-4 text-ash">
           <span className="text-carmim-light">(06)</span>
           <span>Contato</span>
@@ -34,8 +43,7 @@ export function ContactCTA() {
 
         <h2
           id="contato-titulo"
-          data-anchor
-          className="mt-10 text-[clamp(52px,8.4vw,148px)] leading-[0.92] font-normal tracking-[-0.05em]"
+          className="mt-10 text-[clamp(52px,8.4vw,148px)] leading-[0.92] font-medium tracking-[-0.05em]"
         >
           Vamos construir
           <br />o seu<span className="text-carmim">?</span>

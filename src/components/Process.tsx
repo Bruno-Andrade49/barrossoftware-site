@@ -38,7 +38,7 @@ export function Process() {
       <div className="mt-10 grid gap-8 md:grid-cols-12 md:items-end">
         <h2
           id="processo-titulo"
-          className="text-[clamp(40px,5.4vw,92px)] leading-[0.95] font-normal tracking-[-0.045em] md:col-span-7"
+          className="text-[clamp(40px,5.4vw,92px)] leading-[0.95] font-medium tracking-[-0.045em] md:col-span-7"
         >
           Sem surpresa
           <br />
@@ -76,7 +76,7 @@ export function Process() {
               <p data-text className="mono-label text-ash">
                 Etapa {step.number}
               </p>
-              <h3 data-text className="mt-3 text-[clamp(26px,2.2vw,36px)] leading-none font-normal tracking-[-0.04em]">
+              <h3 data-text className="mt-3 text-[clamp(26px,2.2vw,36px)] leading-none font-medium tracking-[-0.04em]">
                 {step.title}
               </h3>
               <p data-text className="mt-4 text-[16px] leading-[1.55] font-light text-mist">

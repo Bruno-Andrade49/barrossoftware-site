@@ -68,7 +68,7 @@ export function Footer() {
         data-anchor
         data-word="BARROS"
         aria-hidden="true"
-        className="display mt-10 text-center font-sans tracking-[-0.055em] text-[19vw] leading-[0.9] text-transparent select-none"
+        className="display mt-10 text-center font-sans tracking-[-0.055em] text-[25vw] leading-[0.9] md:text-[19vw] text-transparent select-none"
       >
         BARROS
       </p>

@@ -9,9 +9,11 @@ import { ProjectClip } from "./ProjectClip";
 const pad = (n: number) => String(n).padStart(2, "0");
 
 /**
- * Trabalhos: a seção fica fixa e o scroll vertical passa os projetos para o lado.
- * Cada projeto ocupa uma tela: vídeo do site no computador com o celular sobreposto e,
- * ao lado, nome, descrição e stack. Tudo anda junto no trilho; o texto entra com um leve atraso.
+ * Trabalhos.
+ * Desktop: a seção fica fixa e o scroll vertical passa os projetos para o lado. Cada projeto ocupa
+ * uma tela: vídeo do site no computador com o celular sobreposto e, ao lado, nome, descrição e stack.
+ * Celular: carrossel nativo, deslizado com o dedo. Um cartão por projeto, que para centralizado,
+ * com a borda do próximo aparecendo para mostrar que dá para deslizar.
  */
 export function Work() {
   const section = useRef<HTMLElement>(null);
@@ -19,13 +21,40 @@ export function Work() {
   const track = useRef<HTMLDivElement>(null);
   const counter = useRef<HTMLSpanElement>(null);
   const bar = useRef<HTMLSpanElement>(null);
+  const counterMobile = useRef<HTMLSpanElement>(null);
+  const barMobile = useRef<HTMLSpanElement>(null);
+
+  // Celular: o contador e a barra seguem o deslize do carrossel
+  useEffect(() => {
+    const t = track.current;
+    if (!t) return;
+    const mq = window.matchMedia("(max-width: 767px)");
+    const onScroll = () => {
+      if (!mq.matches) return;
+      const cards = Array.from(t.querySelectorAll<HTMLElement>("[data-panel]"));
+      const center = t.scrollLeft + t.clientWidth / 2;
+      const dist = (c: HTMLElement) => Math.abs(c.offsetLeft + c.offsetWidth / 2 - center);
+      let best = 0;
+      cards.forEach((c, k) => {
+        if (dist(c) < dist(cards[best])) best = k;
+      });
+      const max = t.scrollWidth - t.clientWidth || 1;
+      if (counterMobile.current) counterMobile.current.textContent = pad(best + 1);
+      if (barMobile.current) barMobile.current.style.transform = `scaleX(${Math.max(0.04, t.scrollLeft / max)})`;
+    };
+    onScroll();
+    t.addEventListener("scroll", onScroll, { passive: true });
+    return () => t.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const s = section.current;
     const st = stage.current;
     const t = track.current;
     if (!s || !st || !t || prefersReducedMotion()) return;
-    const ctx = gsap.context(() => {
+    // a trilha fixa só existe no desktop; no celular o carrossel é nativo
+    const mm = gsap.matchMedia(s);
+    mm.add("(min-width: 768px)", () => {
       const panels = gsap.utils.toArray<HTMLElement>("[data-panel]");
       // projeto atual = o painel mais perto do centro da tela
       const current = () => {
@@ -39,16 +68,6 @@ export function Work() {
         return best + 1;
       };
       const distance = () => Math.max(0, t.scrollWidth - window.innerWidth);
-      // celular: a trilha para centralizada em cada bloco (abertura, projetos, fecho) ao soltar o dedo
-      const phone = window.matchMedia("(max-width: 767px)").matches;
-      const stops = Array.from(t.children) as HTMLElement[];
-      const snapTo = (v: number) => {
-        const d = distance() || 1;
-        const points = stops.map((c) =>
-          gsap.utils.clamp(0, 1, (c.offsetLeft + c.offsetWidth / 2 - window.innerWidth / 2) / d),
-        );
-        return points.reduce((a, b) => (Math.abs(b - v) < Math.abs(a - v) ? b : a));
-      };
       const slide = gsap.to(t, {
         x: () => -distance(),
         ease: "none",
@@ -59,8 +78,7 @@ export function Work() {
           start: "top top",
           end: () => `+=${distance()}`,
           pin: true,
-          scrub: phone ? 0.6 : 1,
-          snap: phone ? { snapTo, duration: { min: 0.25, max: 0.6 }, delay: 0.04, ease: "power2.inOut" } : undefined,
+          scrub: 1,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
@@ -80,7 +98,7 @@ export function Work() {
         };
         gsap.fromTo(
           panel.querySelectorAll("[data-text] > *"),
-          { x: phone ? 56 : 140, opacity: 0 },
+          { x: 140, opacity: 0 },
           {
             x: 0,
             opacity: 1,
@@ -99,7 +117,6 @@ export function Work() {
             scrollTrigger: { ...along, start: "left 100%", end: "left 40%" },
           },
         );
-        if (phone) return; // no celular o aparelho fica parado sobre o texto
         gsap.fromTo(
           panel.querySelector("[data-phone]"),
           { yPercent: 18 },
@@ -110,8 +127,8 @@ export function Work() {
           },
         );
       });
-    }, s);
-    return () => ctx.revert();
+    });
+    return () => mm.revert();
   }, []);
 
   return (
@@ -133,21 +150,49 @@ export function Work() {
       />
       <div
         ref={stage}
-        className="relative h-[100svh] min-h-[620px] overflow-hidden bg-void"
+        className="relative overflow-hidden bg-void py-24 md:h-[100svh] md:min-h-[620px] md:py-0"
       >
+        {/* Cabeçalho (celular): título, dica de deslize e contador */}
+        <div className="px-5 md:hidden">
+          <div className="mono-label flex items-center gap-4 text-ash">
+            <span className="text-carmim-light">(03)</span>
+            <span>Trabalhos</span>
+          </div>
+          <p
+            aria-hidden="true"
+            className="mt-6 text-[clamp(38px,11vw,48px)] leading-[0.98] font-medium tracking-[-0.042em] [font-family:var(--font-display)]"
+          >
+            Trabalhos
+            <br />
+            recentes<span className="text-carmim">.</span>
+          </p>
+          <div className="mono-label mt-8 flex items-center gap-4 text-ash" aria-hidden="true">
+            <span>Arraste para o lado</span>
+            <span className="relative block h-px flex-1 overflow-hidden bg-white/10">
+              <span
+                ref={barMobile}
+                className="absolute inset-0 origin-left scale-x-[0.04] bg-carmim-light transition-transform duration-200"
+              />
+            </span>
+            <span className="text-bone tabular-nums">
+              <span ref={counterMobile}>01</span> / {pad(cases.length)}
+            </span>
+          </div>
+        </div>
+
         <div
           ref={track}
-          className="flex h-full items-center overflow-x-auto [scrollbar-width:none] motion-safe:overflow-visible"
+          className="mt-6 flex items-stretch gap-4 overflow-x-auto overscroll-x-contain px-5 [scrollbar-width:none] max-md:snap-x max-md:snap-mandatory max-md:scroll-px-5 md:mt-0 md:h-full md:items-center md:gap-0 md:px-0 md:motion-safe:overflow-visible [&::-webkit-scrollbar]:hidden"
         >
-          {/* Abertura do trilho */}
-          <div className="flex w-[88vw] shrink-0 flex-col justify-center px-4 md:w-[42vw] md:pr-0 md:pl-12">
+          {/* Abertura do trilho (desktop) */}
+          <div className="hidden w-[42vw] shrink-0 flex-col justify-center pl-12 md:flex">
             <div className="mono-label flex items-center gap-4 text-ash">
               <span className="text-carmim-light">(03)</span>
               <span>Trabalhos</span>
             </div>
             <h2
               id="trabalhos-titulo"
-              className="mt-8 text-[clamp(40px,4.6vw,80px)] leading-[0.98] font-normal tracking-[-0.042em]"
+              className="mt-8 text-[clamp(40px,4.6vw,80px)] leading-[0.98] font-medium tracking-[-0.042em]"
             >
               Trabalhos
               <br />
@@ -172,9 +217,9 @@ export function Work() {
               key={c.slug}
               data-panel
               aria-label={c.name}
-              className="flex h-full w-screen shrink-0 items-center px-5 pt-24 pb-24 md:w-[94vw] md:px-12 md:pt-24 md:pb-20"
+              className="flex shrink-0 max-md:w-[84vw] max-md:snap-center max-md:snap-always max-md:rounded-[28px] max-md:border max-md:border-white/10 max-md:bg-surface max-md:p-5 md:h-full md:w-[94vw] md:items-center md:px-12 md:pt-24 md:pb-20"
             >
-              <div className="grid w-full items-center gap-6 md:grid-cols-12 md:gap-12">
+              <div className="flex w-full flex-col gap-5 md:grid md:grid-cols-12 md:items-center md:gap-12">
                 {/* Vídeos: computador com o celular sobreposto (no celular, só a versão mobile) */}
                 <div className="relative md:col-span-8">
                   <div data-screen className="hidden origin-left md:block">
@@ -186,7 +231,7 @@ export function Work() {
                   </div>
                   <div
                     data-phone
-                    className="mx-auto h-[46svh] w-fit drop-shadow-[0_30px_50px_rgb(0_0_0/0.7)] md:absolute md:-right-6 md:-bottom-12 md:mx-0 md:h-[80%]"
+                    className="mx-auto h-[min(40svh,380px)] w-fit drop-shadow-[0_30px_50px_rgb(0_0_0/0.7)] md:absolute md:-right-6 md:-bottom-12 md:mx-0 md:h-[80%]"
                   >
                     <ProjectClip item={c} variant="mobile" className="h-full" />
                   </div>
@@ -197,7 +242,7 @@ export function Work() {
                   <p className="mono-label text-carmim-light">
                     ({pad(i + 1)}/{pad(cases.length)})
                   </p>
-                  <h3 className="mt-3 text-[clamp(30px,3.4vw,58px)] leading-[0.95] font-normal tracking-[-0.04em] md:mt-4">
+                  <h3 className="mt-3 text-[clamp(28px,3.4vw,58px)] leading-[0.95] font-medium tracking-[-0.04em] md:mt-4">
                     {c.name}
                   </h3>
                   <p className="mono-label mt-4 text-ash">
@@ -232,7 +277,7 @@ export function Work() {
           ))}
 
           {/* Fecho do trilho */}
-          <div className="flex w-[88vw] shrink-0 flex-col justify-center px-4 md:w-[40vw] md:px-12">
+          <div className="flex shrink-0 flex-col justify-center max-md:w-[84vw] max-md:snap-center max-md:rounded-[28px] max-md:border max-md:border-dashed max-md:border-white/15 max-md:p-6 md:w-[40vw] md:px-12">
             <p className="mono-label text-carmim-light">Próximo projeto</p>
             <p className="mt-4 text-[clamp(36px,4vw,68px)] leading-[1] font-normal tracking-[-0.05em]">
               O seu<span className="text-carmim">.</span>
@@ -245,9 +290,9 @@ export function Work() {
           </div>
         </div>
 
-        {/* Progresso: linha fina no pé da seção */}
+        {/* Progresso (desktop): linha fina no pé da seção */}
         <div
-          className="mono-label pointer-events-none absolute inset-x-5 top-[76px] flex items-center gap-4 text-ash md:inset-x-12 md:top-auto md:bottom-6"
+          className="mono-label pointer-events-none absolute inset-x-12 bottom-6 hidden items-center gap-4 text-ash md:flex"
           aria-hidden="true"
         >
           <span className="relative block h-px flex-1 overflow-hidden bg-white/10">
