@@ -10,6 +10,16 @@ import { flowBus, readyCount, type FlowStats } from "./ParticleStage";
 gsap.registerPlugin(ScrambleTextPlugin);
 
 const GLYPHS = "01<>/{}[]#_+*";
+
+// O título alterna entre o que a empresa faz (verbo + objeto). O h1 mantém "Move negócios." para
+// buscadores e leitores de tela; a troca é só visual. Palavras com até 8 letras, para caber no celular.
+const HEADLINES: [string, string][] = [
+  ["Move", "negócios"],
+  ["Cria", "sistemas"],
+  ["Lança", "apps"],
+  ["Constrói", "sites"],
+  ["Integra", "IA"],
+];
 const fmtCount = (n: number) => {
   const s = String(Math.round(n)).padStart(6, "0");
   return `${s.slice(0, 3)}.${s.slice(3)}`;
@@ -67,6 +77,39 @@ export function Hero() {
       flowBus.removeEventListener("stats", stats);
     };
   });
+
+  // Troca do título a cada poucos segundos, com o mesmo embaralhamento da entrada.
+  // Pausa quando o hero sai da tela ou a aba fica em segundo plano.
+  useEffect(() => {
+    const el = root.current;
+    const w1 = word1.current;
+    const w2 = word2.current;
+    if (!el || !w1 || !w2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let visible = true;
+    let index = 0;
+    let call: gsap.core.Tween | null = null;
+    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0.25 });
+    io.observe(el);
+    const next = () => {
+      if (visible && !document.hidden) {
+        index = (index + 1) % HEADLINES.length;
+        const [verb, noun] = HEADLINES[index];
+        gsap.to(w1, { duration: 1, scrambleText: { text: verb, chars: GLYPHS, revealDelay: 0.2, speed: 0.6 } });
+        gsap.to(w2, {
+          duration: 1.2,
+          delay: 0.12,
+          scrambleText: { text: noun, chars: GLYPHS, revealDelay: 0.25, speed: 0.6 },
+        });
+      }
+      call = gsap.delayedCall(3.4, next);
+    };
+    call = gsap.delayedCall(4.6, next); // começa depois da entrada do hero
+    return () => {
+      io.disconnect();
+      call?.kill();
+      gsap.killTweensOf([w1, w2]);
+    };
+  }, []);
 
   useEffect(() => {
     if (!root.current) return;
@@ -130,7 +173,7 @@ export function Hero() {
       <div className="pointer-events-none relative z-10 flex h-full flex-col px-4 pt-[80px] pb-[calc(20px+env(safe-area-inset-bottom))] md:px-12 md:pt-[88px] md:pb-10">
         {/* Linha de metadados */}
         <div ref={meta} className="mono-label grid grid-cols-2 gap-4 text-ash md:grid-cols-4">
-          <span>(BR) Estúdio de software</span>
+          <span>(BR) Empresa de software</span>
           <span className="hidden md:block">Sistemas / Apps</span>
           <span className="hidden md:block">Sites / IA</span>
           <span className="text-right">

@@ -9,7 +9,7 @@ export function GET() {
   const body = [
     `# ${business.name}`,
     "",
-    "> Estúdio de software da Paraíba que cria sistemas web, apps, sites e automações com IA sob medida para empresas de todo o Brasil.",
+    "> Empresa de software da Paraíba que cria sistemas web, apps, sites e automações com IA sob medida para empresas de todo o Brasil.",
     "",
     "## Serviços",
     ...services.map((s) => `- **${s.title}**: ${s.text}`),

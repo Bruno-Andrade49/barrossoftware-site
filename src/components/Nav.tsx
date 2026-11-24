@@ -35,7 +35,9 @@ export function Nav() {
       const b = button.current?.getBoundingClientRect();
       const x = b ? b.left + b.width / 2 : window.innerWidth - 40;
       const y = b ? b.top + b.height / 2 : 32;
-      const r = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y)) + 40;
+      // raio com folga: a altura útil do celular muda quando a barra do navegador recolhe/aparece
+      const tall = Math.max(window.innerHeight, window.screen?.height ?? 0) * 1.2;
+      const r = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, tall - y)) + 80;
       if (prefersReducedMotion()) {
         t.to(el, { autoAlpha: 1, duration: 0.2 });
       } else {
@@ -126,12 +128,13 @@ export function Nav() {
         </div>
       </div>
 
-      {/* Menu do celular: tela inteira, vidro escuro sobre as partículas */}
+      {/* Menu do celular: tela inteira com fundo sólido. Vidro (transparência + desfoque) falhava durante
+          a animação do círculo em alguns celulares e deixava o site aparecer por trás. */}
       <div
         ref={panel}
         id="menu-mobile"
         aria-hidden={!open}
-        className="invisible fixed inset-0 z-40 flex flex-col justify-between bg-void/85 px-4 pt-24 pb-[calc(28px+env(safe-area-inset-bottom))] backdrop-blur-2xl md:hidden"
+        className="invisible fixed inset-0 z-40 flex flex-col justify-between bg-void px-4 pt-24 pb-[calc(28px+env(safe-area-inset-bottom))] md:hidden"
       >
         <nav aria-label="Menu" className="flex flex-col">
           {nav.map((item, i) => (

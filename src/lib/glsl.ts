@@ -85,7 +85,7 @@ export const forms = /* glsl */ `
   vec4 formAt(int f, float seed, vec2 uv, float t) {
     vec4 g = uGeo[f];
     if (f == 1) {
-      // esfera do estúdio
+      // esfera da seção A empresa
       vec3 s = orbitSphere(seed, t, g.xy, min(g.z, g.w) * 0.36);
       return vec4(s, mix(0.1, 1.0, smoothstep(-0.9, 0.9, s.z)));
     }
@@ -176,7 +176,7 @@ export const transit = /* glsl */ `
 
   // 0 = ainda na forma de saída; 1 = atravessando; 2 = chegou (ou não há travessia)
   float phaseOf(float moving, float tt, float dep, float z) {
-    if (moving < 0.5 || wrappedNow(z) || tt > dep + 2.4) return 2.0;
+    if (moving < 0.5 || wrappedNow(z) || tt > dep + 3.6) return 2.0;
     return tt > dep ? 1.0 : 0.0;
   }
 `;

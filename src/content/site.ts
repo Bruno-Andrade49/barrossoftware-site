@@ -32,7 +32,7 @@ export const business: Business = {
 
 export const site = {
   name: business.name,
-  tagline: "Estúdio de software · Brasil",
+  tagline: "Empresa de software · Brasil",
   contact: {
     email: "contato@barrossoftware.com.br", // PREENCHER
     whatsapp: "5500000000000", // PREENCHER: DDI + DDD + número, só dígitos
@@ -110,7 +110,7 @@ export const faq = [
   },
   {
     q: "Vocês atendem fora da Paraíba?",
-    a: "Sim. O estúdio fica na Paraíba e atende empresas de todo o Brasil, de forma remota.",
+    a: "Sim. A empresa fica na Paraíba e atende empresas de todo o Brasil, de forma remota.",
   },
   {
     q: "Tem suporte depois do lançamento?",

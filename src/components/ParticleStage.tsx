@@ -9,7 +9,7 @@ import { forms, river, snoise, transit } from "@/lib/glsl";
  * Palco de partículas da página inteira (um canvas fixo atrás de tudo).
  * Cada seção declara uma forma com data-form; a área da forma vem do elemento [data-anchor]
  * dentro dela (ou da própria seção):
- *   flow (hero) → sphere (estúdio) → drift (serviços) → off (trabalhos, invisível)
+ *   flow (hero) → sphere (a empresa) → drift (serviços) → off (trabalhos, invisível)
  *   → path (processo) → halo (contato) → word (BARROS no rodapé)
  * A forma fica inteira enquanto a seção ocupa o meio da tela e acompanha o scroll dela.
  * Ao trocar de seção, as partículas atravessam pela lateral: saem pela direita (ao descer)
@@ -115,7 +115,7 @@ const velocityShader = /* glsl */ `
         // chegada suave numa forma presa: a velocidade máxima começa baixa e sobe aos poucos,
         // então as linhas deslizam até o lugar em vez de cruzar a tela num risco (ex.: forma ainda
         // abaixo da tela quando a seção começa)
-        float ia = wrappedNow(z) ? wrapAge(z, tt) : tt - dep - 2.4;
+        float ia = wrappedNow(z) ? wrapAge(z, tt) : tt - dep - 3.6;
         if (wrappedNow(z)) desired.x += uDir * 0.6 * (1.0 - smoothstep(0.0, 0.8, ia));
         float vmax = mix(0.6, 6.0, smoothstep(0.2, 2.6, ia));
         float dl = length(desired);
@@ -126,7 +126,8 @@ const velocityShader = /* glsl */ `
       // atravessando: um vento lateral; cada linha mantém a altura em que estava
       // (quem já tinha saído da tela com o scroll sai pela lateral sem ser puxado de volta)
       float age = tt - dep;
-      float spd = mix(2.2, 3.8, layer) * smoothstep(0.0, 0.3, age) + 0.4;
+      // ritmo de vento, não de risco: rápido o bastante para sair da tela em ~1,5 s
+      float spd = mix(1.5, 2.5, layer) * smoothstep(0.0, 0.5, age) + 0.3;
       float wav = snoise(vec3(p.x * 0.7, p.y * 0.7 + seed * 3.0, uTime * 0.25));
       desired = vec2(uDir * spd, wav * 0.12);
       b = 0.4;
@@ -582,6 +583,8 @@ export function ParticleStage() {
     let scrollVel = 0;
     let recollect = 0;
     let mouseGate = 1;
+    let pending = -1;
+    let pendingSince = 0;
     // posição da área das formas A e B no quadro anterior (para o deslocamento do scroll)
     const prevA = new THREE.Vector2(NaN, NaN);
     const prevB = new THREE.Vector2(NaN, NaN);
@@ -604,17 +607,27 @@ export function ParticleStage() {
       lastScroll = window.scrollY;
       scrollVel += (Math.min(sv, 2) - scrollVel) * 0.1;
 
-      const idx = pickActive();
+      // a seção nova precisa ficar estável por um instante antes da troca: num scroll rápido as seções
+      // do meio são puladas, em vez de disparar várias travessias uma por cima da outra
+      const seen = pickActive();
+      if (seen !== pending) {
+        pending = seen;
+        pendingSince = t;
+      }
+      const settled = activeIdx < 0 || t - pendingSince > 0.28;
+      const idx = settled ? pending : activeIdx;
       if (idx >= 0 && idx !== activeIdx) {
         const form = secs[idx].form;
         if (activeIdx < 0 || reduced) {
           // primeira leitura (ou movimento reduzido): já começa na forma certa, sem travessia
           shared.uFormA.value = form;
         } else {
+          // travessia anterior ainda no meio: mantém o sentido, para as linhas não darem meia-volta
+          const midway = shared.uFormA.value !== shared.uFormB.value && t - shared.uTransStart.value < 3;
           shared.uFormA.value = shared.uFormB.value;
           shared.uTransStart.value = t;
           shared.uTransId.value = (shared.uTransId.value % 60) + 1;
-          shared.uDir.value = idx > activeIdx ? 1 : -1;
+          if (!midway) shared.uDir.value = idx > activeIdx ? 1 : -1;
         }
         shared.uFormB.value = form;
         activeIdx = idx;
@@ -624,7 +637,7 @@ export function ParticleStage() {
       const A = shared.uFormA.value;
       const B = shared.uFormB.value;
       // travessia terminada: todas as partículas já estão na forma nova
-      if (A !== B && t - shared.uTransStart.value > 5.5) shared.uFormA.value = B;
+      if (A !== B && t - shared.uTransStart.value > 6.5) shared.uFormA.value = B;
       const moving = shared.uFormA.value !== B;
       pu.uWrap.value = isFree(B) || (moving && isFree(A)) ? 1 : 0;
 

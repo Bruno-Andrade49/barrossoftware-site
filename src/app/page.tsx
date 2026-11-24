@@ -13,10 +13,10 @@ import { JsonLd } from "@/components/JsonLd";
 import { homeSchema } from "@/lib/schema";
 
 const description =
-  "Estúdio de software da Paraíba que cria sistemas web, apps, sites e automações com IA sob medida para empresas de todo o Brasil. Resposta em até 1 dia útil.";
+  "Empresa de software da Paraíba que cria sistemas web, apps, sites e automações com IA sob medida para empresas de todo o Brasil. Resposta em até 1 dia útil.";
 
 export const metadata: Metadata = {
-  title: { absolute: "BarrosSoftware | Estúdio de software sob medida na Paraíba" },
+  title: { absolute: "BarrosSoftware | Empresa de software sob medida na Paraíba" },
   description,
   alternates: { canonical: "/" },
   openGraph: { url: "/", title: "BarrosSoftware | Software sob medida", description },

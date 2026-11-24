@@ -29,7 +29,7 @@ export const organization = () => ({
   logo: absolute("/icon.svg"),
   image: absolute("/opengraph-image.jpg"),
   description:
-    "Estúdio de software que cria sistemas web, aplicativos, sites e automações com inteligência artificial sob medida para empresas.",
+    "Empresa de software que cria sistemas web, aplicativos, sites e automações com inteligência artificial sob medida para empresas.",
   email: site.contact.email,
   ...(business.phone && { telephone: business.phone }),
   ...(address() && { address: address() }),

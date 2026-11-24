@@ -8,7 +8,7 @@ const fmt = new Intl.DateTimeFormat("pt-BR", {
   timeZone: "America/Fortaleza",
 });
 
-/** Hora local do estúdio, atualizada a cada 15 s. */
+/** Hora local da empresa, atualizada a cada 15 s. */
 export function LocalClock() {
   const [time, setTime] = useState<string | null>(null);
 

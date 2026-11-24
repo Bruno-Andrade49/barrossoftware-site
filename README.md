@@ -2,7 +2,7 @@
 
 # BarrosSoftware
 
-**Site institucional do estúdio de software BarrosSoftware (Paraíba, Brasil).**
+**Site institucional da BarrosSoftware, empresa de software da Paraíba, Brasil.**
 Um campo de partículas em tempo real atravessa a página inteira e muda de forma a cada seção.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-000?logo=nextdotjs)
@@ -41,12 +41,12 @@ Um campo de partículas em tempo real atravessa a página inteira e muda de form
 
 ## 1. Visão geral
 
-O site apresenta o estúdio, os serviços, os projetos entregues e o processo de trabalho, e leva o visitante até o contato (WhatsApp ou e-mail).
+O site apresenta a empresa, os serviços, os projetos entregues e o processo de trabalho, e leva o visitante até o contato (WhatsApp ou e-mail).
 
 O que ele tem de especial:
 
 - **Um único palco de partículas** (cerca de 28 mil no computador e 7 mil no celular), simulado na GPU e desenhado em linhas finas.
-- **Uma forma por seção.** As partículas viram um fluxo no hero, uma esfera no estúdio, um cabo que passa pelas etapas do processo, um anel em volta do contato e a palavra **BARROS** no rodapé.
+- **Uma forma por seção.** As partículas viram um fluxo no hero, uma esfera na seção da empresa, um cabo que passa pelas etapas do processo, um anel em volta do contato e a palavra **BARROS** no rodapé.
 - **Troca de seção pela lateral.** As partículas saem por um lado da tela e entram pelo outro até montar a forma nova.
 - **Projetos em vídeo** em trilha horizontal, cada um com uma página de case.
 - **Tema claro e escuro**, com troca animada em círculo.
@@ -59,18 +59,18 @@ O que ele tem de especial:
 | # | Seção | Forma das partículas | O que acontece |
 |---|---|---|---|
 | — | **Hero** | Fluxo com uma corrente luminosa | O cursor (ou o dedo) abre um vão nas partículas. Painel com leituras ao vivo (partículas, posição do cursor, fps). |
-| 01 | **O estúdio** | Esfera de órbitas | Manifesto do estúdio e quatro princípios de trabalho. |
+| 01 | **A empresa** | Esfera de órbitas | Manifesto da empresa e quatro princípios de trabalho. |
 | — | **Faixa de serviços** | — | Duas faixas de texto correndo em sentidos opostos. |
 | 02 | **Serviços** | Campo calmo | Quatro frentes: sistemas web, apps, sites e automação/IA. |
 | 03 | **Trabalhos** | Nenhuma (fundo sólido) | A seção fica fixa e o scroll passa os projetos para o lado, com vídeo do computador e do celular. |
 | 04 | **Processo** | Cabo trançado | O cabo passa pelos quatro nós das etapas e fica preso a eles. |
 | 05 | **Perguntas** | Campo calmo | Sete perguntas frequentes que abrem e fecham (as mesmas do JSON-LD FAQPage). |
 | 06 | **Contato** | Anel inclinado | Título orbitado pelo anel, botão do WhatsApp e cópia do e-mail. |
-| — | **Rodapé** | Palavra **BARROS** | As partículas desenham o nome do estúdio. |
+| — | **Rodapé** | Palavra **BARROS** | As partículas desenham o nome da empresa. |
 
 <table>
   <tr>
-    <td><img src="docs/estudio.webp" alt="Seção O estúdio com a esfera de partículas" /></td>
+    <td><img src="docs/estudio.webp" alt="Seção A empresa com a esfera de partículas" /></td>
     <td><img src="docs/processo.webp" alt="Seção Processo com o cabo de partículas passando pelas etapas" /></td>
   </tr>
   <tr>

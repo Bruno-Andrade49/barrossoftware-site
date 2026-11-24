@@ -13,7 +13,7 @@ export function Footer() {
       <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-12">
         <address className="mono-label col-span-2 flex flex-col gap-2 text-ash not-italic md:col-span-1">
           <span className="text-bone">{business.name}</span>
-          <span>Estúdio de software</span>
+          <span>Empresa de software</span>
           {street && <span>{street}</span>}
           <span>{city}</span>
           {business.phone && (

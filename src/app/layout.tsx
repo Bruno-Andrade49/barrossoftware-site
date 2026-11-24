@@ -28,9 +28,9 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: "BarrosSoftware | Estúdio de software sob medida", template: "%s | BarrosSoftware" },
+  title: { default: "BarrosSoftware | Empresa de software sob medida", template: "%s | BarrosSoftware" },
   description:
-    "Estúdio de software da Paraíba que cria sistemas web, apps, sites e automações com IA sob medida para empresas de todo o Brasil.",
+    "Empresa de software da Paraíba que cria sistemas web, apps, sites e automações com IA sob medida para empresas de todo o Brasil.",
   applicationName: "BarrosSoftware",
   creator: "BarrosSoftware",
   publisher: "BarrosSoftware",

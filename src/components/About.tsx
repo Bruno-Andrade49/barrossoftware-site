@@ -7,7 +7,7 @@ const PRINCIPLES = [
   { title: "Contato direto", text: "Você fala com quem desenha e com quem programa." },
 ];
 
-/** Segunda seção: o estúdio à esquerda; a esfera de linhas (canvas do palco) ocupa a direita. */
+/** Segunda seção: a empresa à esquerda; a esfera de linhas (canvas do palco) ocupa a direita. */
 export function About() {
   return (
     <section
@@ -25,7 +25,7 @@ export function About() {
       <Reveal className="relative md:w-[46%]">
         <div className="mono-label flex items-center gap-4 text-ash">
           <span className="text-carmim-light">(01)</span>
-          <span>O estúdio</span>
+          <span>A empresa</span>
           <span className="h-px flex-1 bg-white/10" aria-hidden="true" />
         </div>
 
@@ -33,7 +33,7 @@ export function About() {
           id="estudio-titulo"
           className="mt-10 text-[clamp(40px,4.6vw,76px)] leading-[0.98] font-medium tracking-[-0.042em]"
         >
-          Um estúdio pequeno,
+          Uma empresa pequena,
           <br />
           de propósito<span className="text-carmim">.</span>
         </h2>

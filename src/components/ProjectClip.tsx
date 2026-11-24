@@ -22,8 +22,11 @@ export function ProjectClip({ item, variant, className = "" }: Props) {
   if (variant === "desktop") return clip(className);
 
   return (
-    <div className={`w-fit rounded-[2.1rem] bg-[#0b0b0d] p-[5px] ring-1 ring-white/15 ${className}`}>
-      {clip("h-full rounded-[1.8rem]")}
+    // Proporções medidas na gravação original (820 px de largura): canto de fora ≈ 8,3% da largura,
+    // aro ≈ 2%, canto da tela ≈ 6,4%. Em porcentagem (horizontal / vertical), o desenho acompanha
+    // o vídeo em qualquer tamanho; o vertical é menor porque o aparelho é ~2,1× mais alto que largo.
+    <div className={`w-fit rounded-[8.3%/4%] bg-[#0b0b0d] p-[2%] ring-1 ring-white/15 ${className}`}>
+      {clip("h-full rounded-[6.4%/3%]")}
     </div>
   );
 }
