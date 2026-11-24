@@ -187,12 +187,22 @@ const positionShader = /* glsl */ `
     bool crossing = uDir > 0.0 ? p.x > uHalf.x : p.x < -uHalf.x;
     // (V.z ainda é o do quadro anterior: quem está atravessando e cruza a borda agora é marcado
     // pelo shader de velocidade neste mesmo quadro)
-    if (moving > 0.5 && crossing && boundF(uFormB) < 0.5 && phase > 0.5 && phase < 1.5) {
-      p = vec2(hsh(P.w, 17.3 + uTransId * 1.7) * 2.0 - 1.0, hsh(P.w, 29.1 + uTransId * 2.3) * 2.0 - 1.0) * uHalf;
+    if (moving > 0.5 && crossing && phase > 0.5 && phase < 1.5) {
+      if (boundF(uFormB) < 0.5) {
+        p = vec2(hsh(P.w, 17.3 + uTransId * 1.7) * 2.0 - 1.0, hsh(P.w, 29.1 + uTransId * 2.3) * 2.0 - 1.0) * uHalf;
+      } else {
+        // forma presa: volta pela borda já na altura do seu lugar na forma, então a chegada é
+        // sempre lateral (nunca uma subida ou descida atravessando o texto)
+        vec4 T = formAt(int(uFormB + 0.5), P.w, uv, uTime);
+        p.y = T.y + (hsh(P.w, 5.1) - 0.5) * 0.06;
+      }
     }
     // na horizontal sempre dá a volta (é por onde as partículas atravessam entre seções)
     p.x = mod(p.x + uHalf.x, 2.0 * uHalf.x) - uHalf.x;
-    if (uWrap > 0.5) p.y = mod(p.y + uHalf.y, 2.0 * uHalf.y) - uHalf.y;
+    // na vertical, só quem está numa forma solta dá a volta. Uma forma presa que saiu da tela com o
+    // scroll fica fora dela (antes voltava pelo outro lado e riscava a tela inteira na vertical).
+    float freeNow = phase > 1.5 ? 1.0 - boundF(uFormB) : (phase < 0.5 ? 1.0 - boundF(uFormA) : 0.0);
+    if (uWrap > 0.5 && freeNow > 0.5) p.y = mod(p.y + uHalf.y, 2.0 * uHalf.y) - uHalf.y;
     gl_FragColor = vec4(p, P.z, P.w);
   }
 `;
@@ -532,8 +542,12 @@ export function ParticleStage() {
         const s = secs[candidate];
         if (!isFree(s.form) && s.anchor !== s.el) {
           const r = s.anchor.getBoundingClientRect();
+          // formas compactas (esfera, relevo): o centro precisa estar na tela. O cabo é longo (no celular,
+          // uma coluna mais alta que a tela): basta ele estar cruzando a faixa do meio.
           const cy = r.top + r.height / 2;
-          if (cy > H * 0.82 || cy < H * 0.12) candidate = activeIdx;
+          const visible =
+            s.form === FORM_ID.path ? r.top < H * 0.75 && r.bottom > H * 0.25 : cy < H * 0.82 && cy > H * 0.12;
+          if (!visible) candidate = activeIdx;
         }
       }
       // o rodapé nunca chega ao meio da tela: vale ao chegar perto do fim da página

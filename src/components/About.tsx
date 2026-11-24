@@ -33,9 +33,11 @@ export function About() {
           id="estudio-titulo"
           className="mt-10 text-[clamp(40px,4.6vw,76px)] leading-[0.98] font-medium tracking-[-0.042em]"
         >
-          Uma empresa pequena,
+          Sob medida,
           <br />
-          de propósito<span className="text-carmim">.</span>
+          com quem faz
+          <br />
+          do seu lado<span className="text-carmim">.</span>
         </h2>
 
         <p className="mt-8 max-w-[480px] text-[17px] leading-[1.6] font-light text-mist">
