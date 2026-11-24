@@ -1,0 +1,373 @@
+@import "tailwindcss";
+
+/* BarrosSoftware — palco preto, tipografia gigante, um único acento carmim. */
+/* Tema: os valores mudam com data-theme no <html>. "white" e "black" viram "contraste" e "base",
+   então border-white/10, bg-black/60 etc. se invertem sozinhos no modo claro. */
+:root {
+  --c-void: #000000;
+  --c-bone: #ffffff;
+  --c-ash: #9a9a9a;
+  --c-mist: #bdbdbd;
+  --c-contrast: #ffffff;
+  --c-base: #000000;
+  --c-carmim-light: #f0465e;
+  --c-chrome-a: #ffffff;
+  --c-chrome-b: #f4f4f4;
+  --c-chrome-c: #a8a8a8;
+  --c-surface: #0b0b0d; /* cartões opacos (pilha de serviços no celular) */
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --c-void: #f3f2ee;
+  --c-bone: #0d0d0f;
+  --c-ash: #6b6b70;
+  --c-mist: #45454b;
+  --c-contrast: #000000;
+  --c-base: #ffffff;
+  --c-carmim-light: #b80d29;
+  --c-chrome-a: #0d0d0f;
+  --c-chrome-b: #26262a;
+  --c-chrome-c: #6b6b70;
+  --c-surface: #fbfaf7;
+  color-scheme: light;
+}
+
+@theme {
+  /* Cores */
+  --color-void: var(--c-void);
+  --color-surface: var(--c-surface);
+  --color-bone: var(--c-bone);
+  --color-ash: var(--c-ash);
+  --color-mist: var(--c-mist);
+  --color-white: var(--c-contrast);
+  --color-black: var(--c-base);
+  --color-carmim: #c8102e; /* só botão principal, logo, sublinhados, partículas */
+  --color-carmim-light: var(--c-carmim-light); /* texto pequeno em vermelho (passa AA no fundo) */
+  --color-ember: #ff8a3d; /* faísca rara: destaque de uma palavra */
+
+  /* Fontes */
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-zalando), var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Escala tipográfica (fluida no mobile) */
+  --text-caption: 12px;
+  --text-caption--line-height: 1.5;
+  --text-nav: 14px;
+  --text-nav--line-height: 1.2;
+  --text-nav--letter-spacing: 0.025em;
+  --text-body: 18px;
+  --text-body--line-height: 1.5;
+  --text-heading-2xs: 24px;
+  --text-heading-2xs--line-height: 1.25;
+  --text-heading-2xs--letter-spacing: -0.02em;
+  --text-heading-xs: 27px;
+  --text-heading-xs--line-height: 1.1;
+  --text-heading-xs--letter-spacing: -0.02em;
+  --text-heading-sm: clamp(30px, 4vw, 42px);
+  --text-heading-sm--line-height: 1.15;
+  --text-heading-sm--letter-spacing: -0.04em;
+  --text-heading: clamp(34px, 5vw, 48px);
+  --text-heading--line-height: 1.1;
+  --text-heading--letter-spacing: -0.04em;
+  --text-heading-lg: clamp(44px, 7.5vw, 78px);
+  --text-heading-lg--line-height: 1.05;
+  --text-heading-lg--letter-spacing: -0.04em;
+  --text-display: clamp(52px, 9vw, 113px);
+  --text-display--line-height: 0.98;
+  --text-display--letter-spacing: -0.045em;
+
+  /* Raios */
+  --radius-3xl: 24px;
+
+  /* Animações */
+  --animate-fade-up: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@layer base {
+  /* títulos na fonte expandida; as alternativas do Inter (ss01/cv11) não valem para ela */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-feature-settings: normal;
+  }
+
+  html {
+    background: var(--color-void);
+    color: var(--color-bone);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "ss01" on, "cv11" on;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    /* transparente: o palco de partículas fica atrás do conteúdo (o fundo preto vem do html) */
+    background: transparent;
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-carmim);
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-carmim-light);
+    outline-offset: 4px;
+    border-radius: 6px;
+  }
+
+  section[id] {
+    scroll-margin-top: 96px;
+  }
+}
+
+@layer components {
+  /* Contêiner padrão: 1280px com respiro lateral */
+  .container-site {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: 16px;
+  }
+  @media (min-width: 768px) {
+    .container-site { padding-inline: 36px; }
+  }
+
+  /* Rótulo pequeno em caixa alta */
+  .eyebrow {
+    font-size: var(--text-nav);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-carmim-light);
+  }
+
+  /* Display condensado e pesado (títulos de impacto) */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+  }
+  .display em {
+    font-style: normal;
+  }
+
+  /* Preenchimento metálico: branco em cima, cinza embaixo */
+  .fill-chrome {
+    background: linear-gradient(180deg, var(--c-chrome-a) 0%, var(--c-chrome-b) 50%, var(--c-chrome-c) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .fill-carmim {
+    background: linear-gradient(180deg, #ff4d63 0%, #e0183a 45%, #8f0a20 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Letra do título animado: estende o degradê para cima, senão o acento (Ó) fica transparente */
+  /* O degradê só pinta dentro da caixa; a folga em cima mantém os acentos (Ó, Â) visíveis */
+  .fill-chrome,
+  .fill-carmim {
+    padding-block: 0.2em;
+  }
+  .split-char {
+    margin-block: -0.2em;
+  }
+
+  /* Texto vazado (só contorno) */
+  .outline-text {
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in oklab, var(--c-contrast) 35%, transparent);
+  }
+
+  /* Faixa infinita */
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 38s linear infinite;
+  }
+  .marquee-track.reverse { animation-direction: reverse; }
+
+  /* Rótulo mono pequeno */
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* Botão principal com brilho carmim */
+  .btn-glow {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    border-radius: 9999px;
+    background: var(--color-carmim);
+    color: var(--color-bone);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow:
+      0 0 0 1px rgb(255 90 110 / 0.45) inset,
+      0 0 24px rgb(200 16 46 / 0.55),
+      0 0 64px rgb(200 16 46 / 0.25);
+    transition: box-shadow 0.4s ease, transform 0.4s ease, background-color 0.4s ease;
+  }
+  .btn-glow:hover {
+    background: #d8143a;
+    box-shadow:
+      0 0 0 1px rgb(255 120 135 / 0.7) inset,
+      0 0 32px rgb(200 16 46 / 0.8),
+      0 0 96px rgb(200 16 46 / 0.4);
+  }
+  .btn-glow:active { transform: scale(0.98); }
+
+  /* Corpo ultraleve, assinatura do estilo */
+  .body-light {
+    font-size: var(--text-body);
+    line-height: 1.5;
+    font-weight: 200;
+  }
+}
+
+/* Dock do celular: o rótulo da seção entra de baixo ao trocar */
+.dock-label {
+  animation: dock-label 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes dock-label {
+  from { transform: translateY(80%); opacity: 0; }
+}
+
+/* Granulado de filme sobre a página inteira */
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Máscaras do título do hero: folga para acentos (Ó) e para o itálico */
+.split-heading [class$="-mask"] {
+  padding: 0.14em 0.08em 0.3em;
+  margin: -0.14em -0.08em -0.3em;
+}
+
+/* Máscara de linha do título do hero: folga para o acento (ó) e a perna do g */
+.line-mask {
+  overflow: hidden;
+  padding: 0.1em 0.06em 0.18em;
+  margin: -0.1em -0.06em -0.18em;
+}
+
+/* Indicador "role para explorar" */
+.scroll-cue {
+  animation: scroll-cue 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes scroll-cue {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(300%); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Cursor customizado (só em mouse) */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 9999px;
+  background: #ffffff;
+  mix-blend-mode: difference;
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1), height 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    margin 0.45s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s;
+}
+.cursor-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+.cursor.is-active {
+  width: 104px;
+  height: 104px;
+  margin: -52px 0 0 -52px;
+  background: var(--color-carmim);
+  mix-blend-mode: normal;
+}
+.cursor.is-active .cursor-label { opacity: 1; }
+@media (hover: none), (pointer: coarse) {
+  .cursor { display: none; }
+}
+
+@keyframes progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Troca de tema: círculo que se abre a partir do botão (View Transitions) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  animation: theme-reveal 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+@keyframes theme-reveal {
+  from { clip-path: circle(0 at var(--tx, 100%) var(--ty, 0%)); }
+  to { clip-path: circle(var(--tr, 150vmax) at var(--tx, 100%) var(--ty, 0%)); }
+}
+/* Sem View Transitions: cores mudam suavemente */
+html.theme-fade, html.theme-fade * {
+  transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease !important;
+}

@@ -1,0 +1,10 @@
+# Fim de linha normalizado (o projeto é editado no Windows e publicado no Linux)
+* text=auto eol=lf
+
+# Mídia: binário, sem diff
+*.mp4  binary
+*.webm binary
+*.jpg  binary
+*.png  binary
+*.webp binary
+*.woff2 binary
