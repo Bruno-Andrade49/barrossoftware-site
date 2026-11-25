@@ -9,7 +9,7 @@ import { isFilled } from "@/content/cases";
 import { getProject, getProjects } from "@/lib/projects";
 import { whatsappUrl } from "@/content/site";
 import { JsonLd } from "@/components/JsonLd";
-import { ParticleStage } from "@/components/ParticleStage";
+import { ParticleStage } from "@/components/ParticleStageLazy";
 import { caseSchema } from "@/lib/schema";
 import { clip } from "@/lib/seo";
 

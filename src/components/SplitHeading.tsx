@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useIdleEffect } from "@/lib/useIdleEffect";
+import { useRef } from "react";
 import { gsap, prefersReducedMotion, splitHeading, type SplitText } from "@/lib/motion";
 
 type Props = {
@@ -14,7 +15,7 @@ type Props = {
 export function SplitHeading({ as: Tag = "h2", id, className = "", children }: Props) {
   const ref = useRef<HTMLHeadingElement>(null);
 
-  useEffect(() => {
+  useIdleEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
     let split: SplitText | null = null;

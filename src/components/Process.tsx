@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useIdleEffect } from "@/lib/useIdleEffect";
+import { useRef } from "react";
 import { process as etapas } from "@/content/site";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 import { SectionLabel } from "./SectionLabel";
@@ -12,7 +13,7 @@ import { SectionLabel } from "./SectionLabel";
 export function Process() {
   const list = useRef<HTMLOListElement>(null);
 
-  useEffect(() => {
+  useIdleEffect(() => {
     const el = list.current;
     if (!el || prefersReducedMotion()) return;
     const ctx = gsap.context(() => {

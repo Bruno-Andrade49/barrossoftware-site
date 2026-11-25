@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useIdleEffect } from "@/lib/useIdleEffect";
+import { useRef, useState } from "react";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
@@ -36,7 +37,7 @@ export function CodeRain() {
   const [index, setIndex] = useState(0);
 
   // chuva de código
-  useEffect(() => {
+  useIdleEffect(() => {
     const el = stage.current;
     const cv = canvas.current;
     const ctx = cv?.getContext("2d");
@@ -147,7 +148,7 @@ export function CodeRain() {
   }, []);
 
   // Scroll: trava a faixa, decifra um serviço por trecho, cresce a palavra e acelera a chuva
-  useEffect(() => {
+  useIdleEffect(() => {
     const st = stage.current;
     const target = word.current;
     if (!st || !target || prefersReducedMotion()) return;

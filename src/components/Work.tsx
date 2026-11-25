@@ -1,7 +1,8 @@
 "use client";
 
+import { useIdleEffect } from "@/lib/useIdleEffect";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Observer } from "gsap/Observer";
 import type { Case } from "@/content/cases";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
@@ -26,7 +27,7 @@ export function Work({ cases }: { cases: Case[] }) {
   const counter = useRef<HTMLSpanElement>(null);
   const bar = useRef<HTMLSpanElement>(null);
 
-  useEffect(() => {
+  useIdleEffect(() => {
     const s = section.current;
     const st = stage.current;
     const t = track.current;

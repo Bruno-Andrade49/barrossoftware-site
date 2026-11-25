@@ -6,7 +6,7 @@ import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import { gsap } from "@/lib/motion";
 import { isBooting, whenBooted } from "@/lib/boot";
 import { LocalClock } from "./LocalClock";
-import { flowBus, readyCount, type FlowStats } from "./ParticleStage";
+import { flowBus, flowState, type FlowStats } from "@/lib/flow";
 
 gsap.registerPlugin(ScrambleTextPlugin);
 
@@ -37,8 +37,6 @@ export function Hero() {
   const word2 = useRef<HTMLSpanElement>(null);
   const caret1 = useRef<HTMLSpanElement>(null);
   const caret2 = useRef<HTMLSpanElement>(null);
-  const line1 = useRef<HTMLSpanElement>(null);
-  const line2 = useRef<HTMLSpanElement>(null);
   const side = useRef<HTMLDivElement>(null);
   const footer = useRef<HTMLDivElement>(null);
 
@@ -61,16 +59,21 @@ export function Hero() {
       el.style.color = hot ? "var(--color-carmim-light)" : "";
     }
   };
+  // o palco de partículas carrega depois da página: quando ele anuncia a contagem, o contador sobe até ela
   const onReady = (count: number) => {
+    if (total.current === count) return;
     total.current = count;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      for (const el of [countEl.current, countMobile.current]) if (el) el.textContent = fmtCount(count);
-    }
+    const show = (v: number) => {
+      for (const el of [countEl.current, countMobile.current]) if (el) el.textContent = fmtCount(v);
+    };
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return show(count);
+    const c = { v: 0 };
+    whenBooted(() => gsap.to(c, { v: count, duration: 2.4, ease: "power3.out", onUpdate: () => show(c.v) }));
   };
 
   // O canvas vive fora do hero (palco compartilhado com a seção seguinte); as leituras chegam pelo canal
   useEffect(() => {
-    if (readyCount) onReady(readyCount);
+    if (flowState.count) onReady(flowState.count);
     const ready = (e: Event) => onReady((e as CustomEvent<number>).detail);
     const stats = (e: Event) => onStats((e as CustomEvent<FlowStats>).detail);
     flowBus.addEventListener("ready", ready);
@@ -159,28 +162,15 @@ export function Hero() {
 
     let unboot = () => {};
     const ctx = gsap.context(() => {
-      const counter = { v: 0 };
       // na primeira visita, monta pausada (os elementos já ficam no estado inicial, sob a tela de carregamento)
       const tl = gsap.timeline({ defaults: { ease: "expo.out" }, paused: isBooting() });
       unboot = whenBooted(() => tl.play());
       tl.from(frame.current!.children, { scale: 0, opacity: 0, duration: 1.2, stagger: 0.06 }, 0)
         .from(meta.current!.children, { opacity: 0, y: -10, duration: 1, stagger: 0.07 }, 0.2)
-        .from([line1.current, line2.current], { yPercent: 115, duration: 1.5, stagger: 0.12 }, 0.35)
+        // o título não sai de cena (é o maior elemento da tela, o LCP): só as letras embaralham
         .to(word1.current, { duration: 1.4, scrambleText: { text: "Move", chars: GLYPHS, revealDelay: 0.35, speed: 0.5 } }, 0.35)
         .to(word2.current, { duration: 1.7, scrambleText: { text: "negócios", chars: GLYPHS, revealDelay: 0.45, speed: 0.5 } }, 0.47)
         .from(readout.current!.children, { opacity: 0, x: -8, duration: 0.8, stagger: 0.04 }, 0.6)
-        .to(
-          counter,
-          {
-            v: () => total.current,
-            duration: 2.4,
-            ease: "power3.out",
-            onUpdate: () => {
-              for (const el of [countEl.current, countMobile.current]) if (el) el.textContent = fmtCount(counter.v);
-            },
-          },
-          0.6,
-        )
         .from(side.current!.children, { opacity: 0, y: 24, duration: 1.1, stagger: 0.1 }, 0.9)
         .from(footer.current!.children, { opacity: 0, duration: 1, stagger: 0.08 }, 1.2);
     }, root);
@@ -283,13 +273,13 @@ export function Hero() {
             className="min-w-0 text-[min(20vw,14svh)] leading-[0.86] font-medium tracking-[-0.05em] md:col-span-8 md:text-[clamp(64px,min(11vw,19vh),188px)] md:leading-[0.84]"
           >
             <span className="line-mask block">
-              <span ref={line1} className="block" aria-hidden="true">
+              <span className="block" aria-hidden="true">
                 <span ref={word1}>Move</span>
                 <span ref={caret1} className="hero-caret logo-caret" style={{ display: "none" }} />
               </span>
             </span>
             <span className="line-mask block">
-              <span ref={line2} className="block" aria-hidden="true">
+              <span className="block" aria-hidden="true">
                 <span ref={word2}>negócios</span>
                 {/* o cursor da marca no lugar do ponto final */}
                 <span ref={caret2} className="hero-caret logo-caret" />

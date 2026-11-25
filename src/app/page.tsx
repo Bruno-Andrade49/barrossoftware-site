@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ParticleStage } from "@/components/ParticleStage";
+import { ParticleStage } from "@/components/ParticleStageLazy";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { CodeRain } from "@/components/CodeRain";

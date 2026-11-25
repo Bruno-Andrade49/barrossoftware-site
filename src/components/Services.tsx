@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useIdleEffect } from "@/lib/useIdleEffect";
+import { useRef, type CSSProperties } from "react";
 import { services } from "@/content/site";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 import { SplitHeading } from "./SplitHeading";
@@ -13,7 +14,7 @@ import { SplitHeading } from "./SplitHeading";
 export function Services() {
   const list = useRef<HTMLOListElement>(null);
 
-  useEffect(() => {
+  useIdleEffect(() => {
     const el = list.current;
     if (!el || prefersReducedMotion()) return;
     const mm = gsap.matchMedia();

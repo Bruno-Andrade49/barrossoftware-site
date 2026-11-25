@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useIdleEffect } from "@/lib/useIdleEffect";
+import { useRef } from "react";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 import { SectionLabel } from "./SectionLabel";
@@ -27,7 +28,7 @@ export function About() {
   const root = useRef<HTMLElement>(null);
   const typed = useRef<HTMLSpanElement>(null);
 
-  useEffect(() => {
+  useIdleEffect(() => {
     const el = root.current;
     if (!el || prefersReducedMotion()) return;
     const ctx = gsap.context(() => {

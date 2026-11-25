@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GPUComputationRenderer, type Variable } from "three/examples/jsm/misc/GPUComputationRenderer.js";
 import { forms, river, snoise, transit } from "@/lib/glsl";
+import { flowBus, flowState, type FlowStats } from "@/lib/flow";
 
 /*
  * Palco de partículas da página inteira (um canvas fixo atrás de tudo).
@@ -17,12 +18,6 @@ import { forms, river, snoise, transit } from "@/lib/glsl";
  * Cada partícula é desenhada como uma linha fina (cabeça forte, cauda que some) pela velocidade.
  */
 
-export type FlowStats = { x: number; y: number; agitation: number; fps: number };
-
-/** Canal para o hero ler as estatísticas sem acoplar ao canvas. */
-export const flowBus = new EventTarget();
-/** Última contagem anunciada (para quem se inscreve depois do anúncio). */
-export let readyCount = 0;
 
 const FORM_ID: Record<string, number> = { flow: 0, sphere: 1, stream: 3, path: 4, frame: 5, halo: 6, word: 7, drift: 8, off: 9 };
 // formas guiadas por campo de velocidade (não por alvo): fluxo, corrente, deriva e invisível
@@ -708,7 +703,7 @@ export function ParticleStage() {
       }
     };
 
-    readyCount = COUNT;
+    flowState.count = COUNT;
     flowBus.dispatchEvent(new CustomEvent("ready", { detail: COUNT }));
     // A fonte precisa estar pronta para amostrar o BARROS
     document.fonts.ready.then(() => {

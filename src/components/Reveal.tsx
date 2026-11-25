@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, type RefObject } from "react";
+import { useIdleEffect } from "@/lib/useIdleEffect";
+import { useRef, type RefObject } from "react";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 type Props = {
@@ -14,7 +15,7 @@ type Props = {
 export function Reveal({ as: Tag = "div", className = "", stagger = 0.08, children }: Props) {
   const ref = useRef<HTMLElement>(null);
 
-  useEffect(() => {
+  useIdleEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
     const ctx = gsap.context(() => {
