@@ -1,6 +1,10 @@
-// Trabalhos exibidos no site. Confirme a autorização de cada cliente antes de publicar.
+// Projetos de partida do site. Com o CMS (/painel) configurado, o site lê os projetos do Supabase;
+// esta lista vale enquanto o banco estiver vazio e é a que o botão "Importar" do painel copia para lá.
+// Confirme a autorização de cada cliente antes de publicar.
 
 export type Case = {
+  /** Identificador no banco (só existe nos projetos vindos do CMS). */
+  id?: string;
   slug: string;
   name: string;
   client: string;
@@ -13,16 +17,18 @@ export type Case = {
   solution: string;
   stack: string[];
   results: string[];
-  /** Gravações do site (computador e celular) em /public/videos; a capa .jpg tem o mesmo nome. */
+  /** Gravações do site (computador e celular): /public/videos ou arquivos enviados pelo painel. */
   video: { desktop: string; mobile: string };
+  /** Primeiro quadro de cada gravação em WebP, exibido até o vídeo começar. */
+  poster: { desktop: string; mobile: string };
   /** Proporção de cada gravação (largura / altura), para a moldura não cortar nem esticar. */
   aspect: { desktop: string; mobile: string };
   /** Capa do vídeo do computador em JPG, só para compartilhamento (Open Graph): nem todo app lê WebP. */
   cover: string;
   /** Endereço do site no ar (botão "Ver o site no ar"). */
   url?: string;
-  /** Telas principais (capturas das gravações em /public/images/projetos), com legenda curta. */
-  gallery: { src: string; caption: string }[];
+  /** Telas principais com legenda curta; largura e altura vêm junto quando a imagem foi enviada pelo painel. */
+  gallery: { src: string; caption: string; width?: number; height?: number }[];
 };
 
 /** Texto ainda não preenchido: fica de fora da página até alguém escrever. */
@@ -34,6 +40,7 @@ const shots = (slug: string, captions: string[]) =>
 // Gravações: computador 1600×912; celular 540×1150, só a tela (a moldura do aparelho é desenhada no CSS)
 const media = (name: string, aspect = { desktop: "1600 / 912", mobile: "540 / 1150" }) => ({
   video: { desktop: `/videos/${name}-desktop.mp4`, mobile: `/videos/${name}-mobile.mp4` },
+  poster: { desktop: `/videos/${name}-desktop.webp`, mobile: `/videos/${name}-mobile.webp` },
   cover: `/videos/${name}-desktop.jpg`,
   aspect,
 });

@@ -5,17 +5,19 @@ import { notFound } from "next/navigation";
 import { ProjectClip } from "@/components/ProjectClip";
 import { SplitHeading } from "@/components/SplitHeading";
 import { Reveal } from "@/components/Reveal";
-import { cases, getCase, isFilled } from "@/content/cases";
+import { isFilled } from "@/content/cases";
+import { getProject, getProjects } from "@/lib/projects";
 import { whatsappUrl } from "@/content/site";
 import { JsonLd } from "@/components/JsonLd";
 import { ParticleStage } from "@/components/ParticleStage";
 import { caseSchema } from "@/lib/schema";
 import { clip } from "@/lib/seo";
 
-export const dynamicParams = false;
+// Projetos publicados depois do build (pelo painel) também abrem: a página é gerada na primeira visita.
+export const dynamicParams = true;
 
-export function generateStaticParams() {
-  return cases.map((c) => ({ slug: c.slug }));
+export async function generateStaticParams() {
+  return (await getProjects()).map((c) => ({ slug: c.slug }));
 }
 
 type PageProps = {
@@ -24,11 +26,12 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const item = getCase(slug);
+  const item = await getProject(slug);
   if (!item) return {};
   const path = `/trabalhos/${item.slug}`;
   // "Geoparque Cariri — Portal institucional | BarrosSoftware"
   const title = `${item.name} — ${item.type}`;
+  const [aw, ah] = item.aspect.desktop.split("/").map(Number);
   const description = clip(item.description);
   return {
     title,
@@ -39,7 +42,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: path,
       title,
       description,
-      images: [{ url: item.cover, width: 1600, height: 912, alt: `${item.name} no computador` }],
+      images: [{ url: item.cover, width: 1600, height: Math.round((1600 * ah) / aw), alt: `${item.name} no computador` }],
     },
   };
 }
@@ -53,7 +56,8 @@ const pad = (n: number) => String(n).padStart(2, "0");
  */
 export default async function CasePage({ params }: PageProps) {
   const { slug } = await params;
-  const item = getCase(slug);
+  const cases = await getProjects();
+  const item = cases.find((c) => c.slug === slug);
   if (!item) notFound();
 
   const index = cases.findIndex((c) => c.slug === item.slug);
@@ -200,8 +204,8 @@ export default async function CasePage({ params }: PageProps) {
                     <Image
                       src={g.src}
                       alt={`${item.name}: ${g.caption}`}
-                      width={1600}
-                      height={Math.round((1600 * ah) / aw)}
+                      width={g.width ?? 1600}
+                      height={g.height ?? Math.round((1600 * ah) / aw)}
                       sizes="(min-width: 768px) 46vw, 92vw"
                       className="h-auto w-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.02]"
                     />

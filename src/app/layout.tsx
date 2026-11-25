@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Cursor } from "@/components/Cursor";
 import { LiquidGlass } from "@/components/LiquidGlass";
+import { SiteOnly } from "@/components/SiteOnly";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { siteUrl } from "@/lib/seo";
@@ -75,11 +76,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           Pular para o conteúdo
         </a>
         <LiquidGlass />
-        <SmoothScroll />
-        <Cursor />
-        <Nav />
+        <SiteOnly>
+          <SmoothScroll />
+          <Cursor />
+          <Nav />
+        </SiteOnly>
         <main id="conteudo">{children}</main>
-        <Footer />
+        <SiteOnly>
+          <Footer />
+        </SiteOnly>
         <div className="grain" aria-hidden="true" />
         {/* medição de visitas e desempenho sem cookies (Vercel); só envia dados quando publicado na Vercel */}
         <Analytics />

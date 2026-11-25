@@ -28,7 +28,7 @@ Um campo de partículas em tempo real atravessa a página inteira e muda de form
 6. [Estrutura do projeto](#6-estrutura-do-projeto)
 7. [Como rodar](#7-como-rodar)
 8. [Editar o conteúdo](#8-editar-o-conteúdo)
-9. [Adicionar um projeto](#9-adicionar-um-projeto)
+9. [Adicionar um projeto (painel)](#9-adicionar-um-projeto-painel)
 10. [Como funcionam as partículas](#10-como-funcionam-as-partículas)
 11. [Tema claro e escuro](#11-tema-claro-e-escuro)
 12. [Acessibilidade, desempenho e segurança](#12-acessibilidade-desempenho-e-segurança)
@@ -70,7 +70,7 @@ O que ele tem de especial:
 
 <table>
   <tr>
-    <td><img src="docs/estudio.webp" alt="Seção A empresa com a esfera de partículas" /></td>
+    <td><img src="docs/empresa.webp" alt="Seção A empresa" /></td>
     <td><img src="docs/processo.webp" alt="Seção Processo com o cabo de partículas passando pelas etapas" /></td>
   </tr>
   <tr>
@@ -213,32 +213,61 @@ Todo o texto que muda com frequência fica em `src/content/`, separado dos compo
 
 ---
 
-## 9. Adicionar um projeto
+## 9. Adicionar um projeto (painel)
 
-1. **Grave o site** no computador e no celular.
-2. **Converta os vídeos** com o [ffmpeg](https://ffmpeg.org): MP4 H.264, sem áudio e com início rápido.
+Os projetos são cadastrados no painel em **`/painel`**, sem mexer no código. Os dados ficam no Supabase
+(banco + arquivos) e o site atualiza assim que você salva.
 
-   ```bash
-   # computador: 1600 px de largura
-   ffmpeg -i projeto-desktop.webm -an -vf "fps=30,scale=1600:-2" \
-     -c:v libx264 -preset slow -crf 25 -pix_fmt yuv420p -movflags +faststart \
-     public/videos/projeto-desktop.mp4
+### Configurar uma vez
 
-   # celular: só a tela (a moldura do aparelho é desenhada no CSS); ajuste o crop à gravação
-   ffmpeg -i projeto-mobile.webm -an -vf "fps=30,crop=780:1660:20:20,scale=540:-2" \
-     -c:v libx264 -preset slow -crf 25 -pix_fmt yuv420p -movflags +faststart \
-     public/videos/projeto-mobile.mp4
+1. Crie um projeto em [supabase.com](https://supabase.com) (o plano grátis serve).
+2. No **SQL Editor**, rode [`supabase/schema.sql`](supabase/schema.sql): cria as tabelas `projects` e `login_failures`
+   e o bucket `projetos`. Pode rodar de novo sem perder dados.
+3. Cadastre as variáveis (na Vercel: *Settings → Environment Variables*; localmente: `.env.local`):
 
-   # capas em WebP (1º segundo de cada vídeo) + JPG do computador para o compartilhamento
-   ffmpeg -ss 1 -i public/videos/projeto-desktop.mp4 -frames:v 1 -c:v libwebp -quality 82 public/videos/projeto-desktop.webp
-   ffmpeg -ss 1 -i public/videos/projeto-mobile.mp4  -frames:v 1 -c:v libwebp -quality 82 public/videos/projeto-mobile.webp
-   ffmpeg -ss 1 -i public/videos/projeto-desktop.mp4 -frames:v 1 -q:v 3 public/videos/projeto-desktop.jpg
-   ```
+   | Variável | O que é |
+   | --- | --- |
+   | `SUPABASE_URL` | URL do projeto (*Project Settings → API*) |
+   | `SUPABASE_SERVICE_ROLE_KEY` | Chave `service_role`. Só no servidor; nunca com prefixo `NEXT_PUBLIC_` |
+   | `ADMIN_USER` / `ADMIN_PASSWORD` | Login do painel. Senha com 12+ caracteres (de preferência 20+, gerada por um gerenciador) |
+   | `ADMIN_SESSION_SECRET` | 32+ caracteres aleatórios: `node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"` |
 
-3. **Tire quatro telas** de 1600 px em WebP e salve como `public/images/projetos/<slug>-1.webp` até `-4.webp`.
-4. **Cadastre o projeto em `src/content/cases.ts`**, com `...media("projeto")` para os vídeos e `gallery: shots("<slug>", [...legendas])` para as telas.
+4. Faça um novo deploy, entre em `/painel` e clique em **Importar os projetos atuais** para levar os três
+   projetos de `src/content/cases.ts` para o banco.
 
-A home e a página do case se montam sozinhas a partir desses dados.
+### No dia a dia
+
+- **Novo projeto**: nome, textos, tecnologias, vídeos (computador e celular) e telas com legenda.
+  A capa, a imagem de compartilhamento e a proporção saem do próprio vídeo, no navegador.
+- **Rascunho / Publicar**: rascunhos só aparecem no painel. Para publicar são obrigatórios descrição, tipo, ano e os dois vídeos.
+- **Ordem**: as setas da lista definem a ordem dos trabalhos no site.
+- **Apagar**: remove o projeto e os arquivos enviados.
+
+Vídeos: MP4 (H.264) ou WebM, sem áudio, até 50 MB. Para comprimir antes de enviar:
+
+```bash
+# computador: 1600 px de largura
+ffmpeg -i projeto-desktop.webm -an -vf "fps=30,scale=1600:-2" -c:v libx264 -preset slow -crf 25 -pix_fmt yuv420p -movflags +faststart projeto-desktop.mp4
+# celular: só a tela (a moldura do aparelho é desenhada no CSS); ajuste o crop à gravação
+ffmpeg -i projeto-mobile.webm -an -vf "fps=30,crop=780:1660:20:20,scale=540:-2" -c:v libx264 -preset slow -crf 25 -pix_fmt yuv420p -movflags +faststart projeto-mobile.mp4
+```
+
+### Segurança do painel
+
+- Login fixo por variáveis de ambiente, comparado sem vazar informação pelo tempo de resposta.
+  O painel só liga com senha de 12+ caracteres e segredo de 32+.
+- Limite de tentativas guardado no Supabase (vale em todas as instâncias da Vercel): 5 erros em 15 minutos
+  bloqueiam o IP, e 30 erros somando todos os IPs travam o login por 15 minutos. Cada erro ainda leva ~1 s
+  para responder. O IP é guardado só como hash; registros com mais de 1 dia são apagados.
+- Sessão de 7 dias num cookie assinado (HMAC-SHA256), `HttpOnly`, `SameSite=Strict` e `Secure`.
+  Trocar `ADMIN_SESSION_SECRET` ou `ADMIN_USER` desloga todo mundo.
+- O `proxy.ts` barra `/painel` sem sessão, e cada página e Server Action confere a sessão de novo.
+- A tabela tem RLS ligado e nenhuma política: só o servidor (chave de serviço) lê e grava. Rascunhos ficam privados.
+- Os arquivos vão do navegador direto ao Supabase por URL assinada, gerada pelo servidor para um único arquivo,
+  com nome aleatório, tipo e tamanho limitados.
+- `/painel` fica fora do Google: `noindex`, `X-Robots-Tag` e bloqueado no `robots.txt`.
+
+Sem o Supabase configurado, o site continua mostrando os projetos de `src/content/cases.ts`.
 
 ---
 

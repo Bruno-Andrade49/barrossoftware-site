@@ -29,8 +29,9 @@ const AI_AND_SEARCH_BOTS = [
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
-      { userAgent: AI_AND_SEARCH_BOTS, allow: "/" },
-      { userAgent: "*", allow: "/" },
+      // o painel (CMS) fica fora de qualquer índice
+      { userAgent: AI_AND_SEARCH_BOTS, allow: "/", disallow: "/painel" },
+      { userAgent: "*", allow: "/", disallow: "/painel" },
     ],
     sitemap: absolute("/sitemap.xml"),
     host: siteUrl,

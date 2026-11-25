@@ -59,7 +59,7 @@ export const nav = [
   { label: "Serviços", href: "/#servicos" },
   { label: "Trabalhos", href: "/#trabalhos" },
   { label: "Processo", href: "/#processo" },
-  { label: "Sobre", href: "/#sobre-estudio" },
+  { label: "Sobre", href: "/#sobre" },
 ] as const;
 
 export const services = [

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { Observer } from "gsap/Observer";
-import { cases } from "@/content/cases";
+import type { Case } from "@/content/cases";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 import { ProjectClip } from "./ProjectClip";
 import { SectionLabel } from "./SectionLabel";
@@ -19,7 +19,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
  * um deslize lateral do dedo também avança ou volta. O texto entra com atraso e o aparelho gira
  * de leve conforme passa (scroll motion).
  */
-export function Work() {
+export function Work({ cases }: { cases: Case[] }) {
   const section = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
@@ -129,7 +129,7 @@ export function Work() {
       });
     }, s);
     return () => ctx.revert();
-  }, []);
+  }, [cases.length]);
 
   return (
     <section ref={section} id="trabalhos" data-form="off" className="relative" aria-labelledby="trabalhos-titulo">

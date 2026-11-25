@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
-import { cases } from "@/content/cases";
+import { getProjects } from "@/lib/projects";
 import { absolute } from "@/lib/seo";
 
-// Gerado no build: a data é a da última publicação.
-export default function sitemap(): MetadataRoute.Sitemap {
+// Atualizado quando o painel publica algo (os projetos vêm do CMS).
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const cases = await getProjects();
   return [
     {
       url: absolute("/"),

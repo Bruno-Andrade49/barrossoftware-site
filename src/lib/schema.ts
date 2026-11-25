@@ -1,4 +1,4 @@
-import { cases, type Case } from "@/content/cases";
+import type { Case } from "@/content/cases";
 import { business, faq, sameAs, services, site } from "@/content/site";
 import { absolute } from "@/lib/seo";
 
@@ -61,7 +61,7 @@ const breadcrumb = (items: { name: string; path: string }[]) => ({
 });
 
 /** Home: empresa, site, serviços, perguntas frequentes, trabalhos e trilha de navegação. */
-export const homeSchema = () => ({
+export const homeSchema = (cases: Case[]) => ({
   "@context": "https://schema.org",
   "@graph": [
     organization(),

@@ -11,8 +11,8 @@ export const siteUrl = (
     : business.domain)
 ).replace(/\/$/, "");
 
-/** URL absoluta a partir de um caminho ("/trabalhos/x" → "https://dominio/trabalhos/x"). */
-export const absolute = (path = "/") => `${siteUrl}${path === "/" ? "" : path}`;
+/** URL absoluta a partir de um caminho ("/trabalhos/x" → "https://dominio/trabalhos/x"). URLs completas passam direto. */
+export const absolute = (path = "/") => (/^https?:\/\//.test(path) ? path : `${siteUrl}${path === "/" ? "" : path}`);
 
 /** Corta um texto no limite de caracteres sem quebrar palavra (para meta description). */
 export function clip(text: string, max = 158) {

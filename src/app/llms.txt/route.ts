@@ -1,11 +1,13 @@
-import { cases } from "@/content/cases";
+import { getProjects } from "@/lib/projects";
 import { business, faq, services, site } from "@/content/site";
 import { absolute } from "@/lib/seo";
 
-// llms.txt (llmstxt.org): resumo do site em Markdown para assistentes de IA. Gerado no build.
+// llms.txt (llmstxt.org): resumo do site em Markdown para assistentes de IA.
+// Estático; o painel o regenera ao publicar projetos.
 export const dynamic = "force-static";
 
-export function GET() {
+export async function GET() {
+  const cases = await getProjects();
   const body = [
     `# ${business.name}`,
     "",

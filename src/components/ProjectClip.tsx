@@ -12,7 +12,7 @@ export function ProjectClip({ item, variant, className = "" }: Props) {
   const clip = (cls: string) => (
     <VideoClip
       src={item.video[variant]}
-      poster={item.video[variant].replace(".mp4", ".webp")}
+      poster={item.poster[variant]}
       label={`${item.name} ${variant === "desktop" ? "no computador" : "no celular"}`}
       className={cls}
       style={{ aspectRatio: item.aspect[variant] }}

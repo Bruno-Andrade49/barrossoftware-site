@@ -78,10 +78,10 @@ export function About() {
   return (
     <section
       ref={root}
-      id="sobre-estudio"
+      id="sobre"
       data-form="off"
       className="relative px-4 py-28 md:px-12 md:py-40"
-      aria-labelledby="estudio-titulo"
+      aria-labelledby="sobre-titulo"
     >
       {/* brilho carmim discreto atrás do terminal */}
       <div
@@ -93,7 +93,7 @@ export function About() {
 
       <div className="mt-12 grid gap-12 md:grid-cols-12 md:items-center md:gap-10">
         <div className="md:col-span-5">
-          <h2 id="estudio-titulo" className="text-[clamp(40px,4.8vw,80px)] leading-[0.98] font-medium tracking-[-0.042em]">
+          <h2 id="sobre-titulo" className="text-[clamp(40px,4.8vw,80px)] leading-[0.98] font-medium tracking-[-0.042em]">
             <span data-decode className="block">
               Código escrito
             </span>

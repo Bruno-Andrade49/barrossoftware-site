@@ -3,14 +3,19 @@ import { business } from "./src/content/site";
 
 const isDev = process.env.NODE_ENV !== "production";
 
-// Política de segurança: o site só carrega recursos dele mesmo.
+// Arquivos dos projetos enviados pelo painel (CMS) ficam no Supabase Storage.
+const supabase = process.env.SUPABASE_URL ? new URL(process.env.SUPABASE_URL) : null;
+const storage = supabase ? ` ${supabase.origin}` : "";
+
+// Política de segurança: o site só carrega recursos dele mesmo (e os arquivos do Supabase, quando configurado).
 const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  `img-src 'self' data: blob:${storage}`,
+  `media-src 'self' blob:${storage}`,
   "font-src 'self'",
-  `connect-src 'self'${isDev ? " ws:" : ""}`,
+  `connect-src 'self'${storage}${isDev ? " ws:" : ""}`,
   "frame-ancestors 'none'",
   "form-action 'self'",
   "base-uri 'self'",
@@ -35,6 +40,10 @@ const nextConfig: NextConfig = {
   images: {
     // As fontes já estão em WebP; o next/image ainda entrega AVIF/WebP no tamanho certo de cada tela.
     formats: ["image/avif", "image/webp"],
+    // telas enviadas pelo painel
+    remotePatterns: supabase
+      ? [{ protocol: "https", hostname: supabase.hostname, pathname: "/storage/v1/object/public/projetos/**" }]
+      : [],
   },
   async redirects() {
     const permanent = { statusCode: 301 as const };
