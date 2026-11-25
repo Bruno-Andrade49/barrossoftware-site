@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ParticleStage } from "@/components/ParticleStage";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
-import { Marquee } from "@/components/Marquee";
+import { CodeRain } from "@/components/CodeRain";
 import { Services } from "@/components/Services";
 import { Work } from "@/components/Work";
 import { Process } from "@/components/Process";
@@ -29,7 +29,7 @@ export default function Home() {
       <ParticleStage />
       <Hero />
       <About />
-      <Marquee />
+      <CodeRain />
       <Services />
       <Work />
       <Process />

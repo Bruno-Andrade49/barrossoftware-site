@@ -185,7 +185,7 @@ export function Hero() {
         <dl
           ref={readout}
           aria-hidden="true"
-          className="mono-label mt-12 hidden w-[260px] grid-cols-[96px_1fr] gap-y-2.5 text-ash md:grid"
+          className="glass mono-label mt-12 hidden w-[300px] grid-cols-[96px_1fr] gap-y-2.5 rounded-2xl px-5 py-4 text-ash md:grid"
         >
           <dt>Sistema</dt>
           <dd className="text-bone">Estação BS-01</dd>
@@ -208,7 +208,7 @@ export function Hero() {
         </dl>
 
         {/* Leitura compacta do núcleo (celular) */}
-        <div className="mono-label mt-8 grid grid-cols-3 border-y border-white/10 py-3 text-ash md:hidden" aria-hidden="true">
+        <div className="glass mono-label mt-8 grid grid-cols-3 rounded-2xl px-4 py-3 text-ash md:hidden" aria-hidden="true">
           <span className="flex flex-col gap-1">
             Partículas
             <span ref={countMobile} className="text-bone tabular-nums">

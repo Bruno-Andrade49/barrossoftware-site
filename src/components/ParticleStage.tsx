@@ -9,8 +9,8 @@ import { forms, river, snoise, transit } from "@/lib/glsl";
  * Palco de partículas da página inteira (um canvas fixo atrás de tudo).
  * Cada seção declara uma forma com data-form; a área da forma vem do elemento [data-anchor]
  * dentro dela (ou da própria seção):
- *   flow (hero) → sphere (a empresa) → drift (serviços) → off (trabalhos, invisível)
- *   → path (processo) → halo (contato) → word (BARROS no rodapé)
+ *   flow (hero) → off (a empresa: o terminal é o destaque) → drift (serviços) → off (trabalhos)
+ *   → path (processo) → drift (perguntas) → halo (contato). O BARROS do rodapé é texto sólido.
  * A forma fica inteira enquanto a seção ocupa o meio da tela e acompanha o scroll dela.
  * Ao trocar de seção, as partículas atravessam pela lateral: saem pela direita (ao descer)
  * e entram pela esquerda até a forma nova; ao subir, o contrário.

@@ -7,6 +7,7 @@
  */
 type Business = {
   name: string;
+  cnpj: string;
   domain: string;
   phone: string;
   address: { street: string; district: string; city: string; region: string; postalCode: string; country: string };
@@ -15,6 +16,7 @@ type Business = {
 
 export const business: Business = {
   name: "BarrosSoftware", // PREENCHER: nome exatamente como no Google
+  cnpj: "", // PREENCHER: ex.: "00.000.000/0001-00" (aparece no rodapé e na política de privacidade)
   /** Domínio oficial, sem barra no fim. Também é o destino do redirecionamento 301 do www. */
   domain: "https://barrossoftware.com.br", // PREENCHER
   phone: "", // PREENCHER: como no Google, ex.: "+55 83 99999-9999"

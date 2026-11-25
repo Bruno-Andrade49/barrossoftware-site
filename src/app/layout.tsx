@@ -4,6 +4,9 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Cursor } from "@/components/Cursor";
+import { LiquidGlass } from "@/components/LiquidGlass";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { siteUrl } from "@/lib/seo";
 import "./globals.css";
 
@@ -71,12 +74,16 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         >
           Pular para o conteúdo
         </a>
+        <LiquidGlass />
         <SmoothScroll />
         <Cursor />
         <Nav />
         <main id="conteudo">{children}</main>
         <Footer />
         <div className="grain" aria-hidden="true" />
+        {/* medição de visitas e desempenho sem cookies (Vercel); só envia dados quando publicado na Vercel */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

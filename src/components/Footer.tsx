@@ -9,7 +9,7 @@ export function Footer() {
   const city = a.city ? `${a.city} — ${a.region}${a.postalCode ? `, ${a.postalCode}` : ""}` : "Paraíba, Brasil";
 
   return (
-    <footer id="rodape" data-form="word" className="relative overflow-hidden border-t border-white/10 px-4 pt-16 pb-10 md:px-8">
+    <footer id="rodape" className="relative overflow-hidden border-t border-white/10 px-4 pt-16 pb-10 md:px-8">
       <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-12">
         <address className="mono-label col-span-2 flex flex-col gap-2 text-ash not-italic md:col-span-1">
           <span className="text-bone">{business.name}</span>
@@ -58,17 +58,23 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="mono-label mt-16 flex flex-col justify-between gap-2 text-ash md:flex-row">
-        <span>© {year} BarrosSoftware. Todos os direitos reservados.</span>
-        <span>Feito à mão, do zero.</span>
+      <div className="mono-label mt-16 flex flex-col justify-between gap-3 text-ash md:flex-row md:items-center">
+        <span>
+          © {year} {business.name}. Todos os direitos reservados.
+          {business.cnpj && <> · CNPJ {business.cnpj}</>}
+        </span>
+        <span className="flex gap-6">
+          <Link href="/privacidade" className="transition-colors hover:text-bone">
+            Política de privacidade
+          </Link>
+          <span>Feito à mão, do zero.</span>
+        </span>
       </div>
 
-      {/* Marca gigante: o texto fica invisível e reserva o espaço; as partículas desenham o BARROS por cima */}
+      {/* Marca gigante em texto sólido (metálico, como os outros títulos grandes) */}
       <p
-        data-anchor
-        data-word="BARROS"
         aria-hidden="true"
-        className="display mt-10 text-center font-sans tracking-[-0.055em] text-[25vw] leading-[0.9] md:text-[19vw] text-transparent select-none"
+        className="display fill-chrome mt-10 text-center font-sans tracking-[-0.055em] text-[19vw] leading-[0.9] select-none"
       >
         BARROS
       </p>

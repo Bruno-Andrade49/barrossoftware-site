@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-/** Marca angular: um "B" fragmentado em dois triângulos, ecoando as partículas do hero. */
+/** Marca provisória: um "B" fragmentado em dois triângulos, ecoando as partículas do hero. */
 export function LogoMark({ className = "size-6" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true">

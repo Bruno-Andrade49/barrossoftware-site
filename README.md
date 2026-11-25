@@ -59,8 +59,8 @@ O que ele tem de especial:
 | # | Seção | Forma das partículas | O que acontece |
 |---|---|---|---|
 | — | **Hero** | Fluxo com uma corrente luminosa | O cursor (ou o dedo) abre um vão nas partículas. Painel com leituras ao vivo (partículas, posição do cursor, fps). |
-| 01 | **A empresa** | Esfera de órbitas | Manifesto da empresa e quatro princípios de trabalho. |
-| — | **Faixa de serviços** | — | Duas faixas de texto correndo em sentidos opostos. |
+| 01 | **A empresa** | Nenhuma (o terminal é o destaque) | Título que se decodifica e os princípios num terminal, confirmados com `[ OK ]`. |
+| — | **Chuva de código** | — | Colunas de caracteres caindo (estilo Matrix) e, no meio, cada serviço sendo decifrado. |
 | 02 | **Serviços** | Campo calmo | Quatro frentes: sistemas web, apps, sites e automação/IA. |
 | 03 | **Trabalhos** | Nenhuma (fundo sólido) | A seção fica fixa e o scroll passa os projetos para o lado, com vídeo do computador e do celular. |
 | 04 | **Processo** | Cabo trançado | O cabo passa pelos quatro nós das etapas e fica preso a eles. |
@@ -175,7 +175,16 @@ npm run dev          # http://localhost:3000
 | `npm run typecheck` | Checagem de tipos do TypeScript |
 | `npm run check` | Lint + tipos + build, em sequência |
 
-Variáveis de ambiente: copie `.env.example` para `.env.local`. A única variável é `NEXT_PUBLIC_SITE_URL`, o endereço público usado nas metatags. Na Vercel ela não é necessária.
+Variáveis de ambiente: copie `.env.example` para `.env.local`.
+
+| Variável | Para quê |
+|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Endereço público usado nas metatags (na Vercel é detectado sozinho). |
+| `RESEND_API_KEY` | Chave do [Resend](https://resend.com), que envia os e-mails do formulário de contato. |
+| `CONTACT_TO` | E-mail que recebe os pedidos do formulário. |
+| `CONTACT_FROM` | Remetente verificado no Resend, ex.: `Site BarrosSoftware <site@barrossoftware.com.br>`. |
+
+Sem as três variáveis do Resend, o formulário avisa que o envio está indisponível e oferece o WhatsApp.
 
 ---
 

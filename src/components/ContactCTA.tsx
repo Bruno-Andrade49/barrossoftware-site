@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { site, whatsappUrl } from "@/content/site";
+import { ContactForm } from "./ContactForm";
 import { LocalClock } from "./LocalClock";
 import { Reveal } from "./Reveal";
 
@@ -60,7 +61,7 @@ export function ContactCTA() {
           <button
             type="button"
             onClick={copy}
-            className="mono-label inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-5 py-[17px] text-ash sm:py-[15px] transition-colors duration-300 hover:border-white/40 hover:text-bone"
+            className="glass-chip mono-label inline-flex items-center justify-center gap-2 rounded-full px-5 py-[17px] text-ash hover:text-bone sm:py-[15px]"
           >
             {copied ? "E-mail copiado ✓" : site.contact.email}
           </button>
@@ -68,6 +69,10 @@ export function ContactCTA() {
         <p className="sr-only" aria-live="polite">
           {copied ? "E-mail copiado" : ""}
         </p>
+
+        <div className="mt-14 w-full max-w-[860px]">
+          <ContactForm />
+        </div>
 
         <dl className="mono-label mt-14 grid w-full max-w-[760px] grid-cols-3 gap-3 border-t border-white/10 pt-6 text-ash sm:mt-20 sm:gap-6 sm:pt-8">
           <div>

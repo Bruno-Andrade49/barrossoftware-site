@@ -1,4 +1,14 @@
-import { Reveal } from "./Reveal";
+"use client";
+
+import { useEffect, useRef } from "react";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+import { gsap, prefersReducedMotion } from "@/lib/motion";
+
+gsap.registerPlugin(ScrambleTextPlugin);
+
+// caracteres da "decodificação": katakana de meia largura (o visual Matrix), binário e símbolos de código
+const GLYPHS = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉ01<>/{}[]=+*#";
+const COMMAND = "barros --principios";
 
 const PRINCIPLES = [
   { title: "Código sob medida", text: "Feito para o seu negócio. O sistema é seu." },
@@ -7,58 +17,143 @@ const PRINCIPLES = [
   { title: "Contato direto", text: "Você fala com quem desenha e com quem programa." },
 ];
 
-/** Segunda seção: a empresa à esquerda; a esfera de linhas (canvas do palco) ocupa a direita. */
+/**
+ * Seção 01 — A empresa. Sem partículas (forma "off"): o terminal é o destaque.
+ * Ao entrar na tela, o título se decodifica, o comando é digitado letra a letra e os princípios
+ * carregam como linhas de um sistema, cada uma confirmada com [ OK ].
+ */
 export function About() {
+  const root = useRef<HTMLElement>(null);
+  const typed = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const el = root.current;
+    if (!el || prefersReducedMotion()) return;
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray<HTMLElement>("[data-decode]").forEach((line, i) => {
+        const text = line.textContent ?? "";
+        gsap.to(line, {
+          duration: 1.4,
+          delay: i * 0.15,
+          scrambleText: { text, chars: GLYPHS, revealDelay: 0.25, speed: 0.45 },
+          scrollTrigger: { trigger: el, start: "top 70%", toggleActions: "play none none none" },
+        });
+      });
+
+      const term = el.querySelector("[data-terminal]");
+      const tl = gsap.timeline({ scrollTrigger: { trigger: term, start: "top 78%", toggleActions: "play none none none" } });
+      tl.from(term, { opacity: 0, y: 40, duration: 0.9, ease: "expo.out" });
+      // comando digitado
+      const cmd = { n: 0 };
+      tl.to(
+        cmd,
+        {
+          n: COMMAND.length,
+          duration: COMMAND.length * 0.045,
+          ease: "none",
+          onUpdate: () => {
+            if (typed.current) typed.current.textContent = COMMAND.slice(0, Math.round(cmd.n));
+          },
+        },
+        "-=0.3",
+      );
+      // linhas carregando: o status passa de [ .. ] para [ OK ]
+      gsap.utils.toArray<HTMLElement>("[data-line]", term).forEach((line) => {
+        const status = line.querySelector("[data-status]");
+        tl.from(line, { opacity: 0, x: -12, duration: 0.35, ease: "power2.out" }, ">0.15");
+        if (status)
+          tl.fromTo(
+            status,
+            { textContent: "[ .. ]" },
+            { duration: 0.45, scrambleText: { text: "[ OK ]", chars: "./-\\|", speed: 1 } },
+            "<0.1",
+          );
+      });
+      tl.from("[data-done]", { opacity: 0, duration: 0.3 }, ">0.1");
+    }, el);
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
+      ref={root}
       id="sobre-estudio"
-      data-form="sphere"
-      className="relative flex min-h-[100svh] flex-col justify-center px-4 pt-[52svh] pb-24 md:px-12 md:py-32"
+      data-form="off"
+      className="relative px-4 py-28 md:px-12 md:py-40"
       aria-labelledby="estudio-titulo"
     >
-      {/* Área da esfera de linhas: metade direita no desktop, topo no celular */}
+      {/* brilho carmim discreto atrás do terminal */}
       <div
-        data-anchor
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[50svh] md:inset-y-0 md:right-0 md:left-auto md:h-auto md:w-1/2"
+        className="pointer-events-none absolute inset-0 -z-[1] bg-[radial-gradient(45%_50%_at_72%_55%,rgb(200_16_46/0.14),transparent_70%)]"
       />
-      <Reveal className="relative md:w-[46%]">
-        <div className="mono-label flex items-center gap-4 text-ash">
-          <span className="text-carmim-light">(01)</span>
-          <span>A empresa</span>
-          <span className="h-px flex-1 bg-white/10" aria-hidden="true" />
+
+      <div className="mono-label flex items-center gap-4 text-ash">
+        <span className="text-carmim-light">(01)</span>
+        <span>A empresa</span>
+        <span className="h-px flex-1 bg-white/10" aria-hidden="true" />
+        <span className="hidden sm:inline">sys://barros</span>
+      </div>
+
+      <div className="mt-12 grid gap-12 md:grid-cols-12 md:items-center md:gap-10">
+        <div className="md:col-span-5">
+          <h2 id="estudio-titulo" className="text-[clamp(40px,4.8vw,80px)] leading-[0.98] font-medium tracking-[-0.042em]">
+            <span data-decode className="block">
+              Código escrito
+            </span>
+            <span className="block">
+              <span data-decode>para o seu</span>
+            </span>
+            <span className="block">
+              <span data-decode>negócio</span>
+              <span className="text-carmim">.</span>
+            </span>
+          </h2>
+          <p className="mt-8 max-w-[440px] text-[17px] leading-[1.6] font-light text-mist">
+            Sem intermediário e sem surpresa. Do primeiro rascunho ao sistema rodando, quem desenha e quem programa
+            estão do seu lado.
+          </p>
         </div>
 
-        <h2
-          id="estudio-titulo"
-          className="mt-10 text-[clamp(40px,4.6vw,76px)] leading-[0.98] font-medium tracking-[-0.042em]"
-        >
-          Sob medida,
-          <br />
-          com quem faz
-          <br />
-          do seu lado<span className="text-carmim">.</span>
-        </h2>
-
-        <p className="mt-8 max-w-[480px] text-[17px] leading-[1.6] font-light text-mist">
-          Sem intermediário e sem surpresa. Do primeiro rascunho ao sistema rodando, a gente cuida de tudo.
-        </p>
-
-        <ol className="mt-14 border-t border-white/10">
-          {PRINCIPLES.map((p, i) => (
-            <li
-              key={p.title}
-              className="grid grid-cols-[44px_1fr] gap-x-4 border-b border-white/10 py-5 md:grid-cols-[56px_220px_1fr] md:items-baseline"
-            >
-              <span className="mono-label text-ash">{String(i + 1).padStart(2, "0")}</span>
-              <span className="text-[17px] font-medium tracking-[-0.01em] text-bone">{p.title}</span>
-              <span className="col-start-2 mt-1 text-[15px] leading-[1.5] font-light text-ash md:col-start-auto md:mt-0">
-                {p.text}
+        {/* Terminal com os princípios */}
+        <div data-terminal className="glass overflow-hidden rounded-2xl md:col-span-7">
+          <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3 md:px-5">
+            <span className="size-2.5 rounded-full bg-carmim/80" aria-hidden="true" />
+            <span className="size-2.5 rounded-full bg-white/20" aria-hidden="true" />
+            <span className="size-2.5 rounded-full bg-white/20" aria-hidden="true" />
+            <span className="mono-label ml-3 truncate text-ash">barros@dev: ~/principios</span>
+            <span className="mono-label ml-auto hidden text-ash sm:inline">zsh</span>
+          </div>
+          <ol className="flex flex-col gap-5 px-4 py-6 font-mono text-[13px] leading-[1.55] md:px-7 md:py-8 md:text-[14.5px]">
+            <li aria-hidden="true" className="text-ash">
+              <span className="text-carmim-light">$</span>{" "}
+              <span ref={typed} className="text-bone">
+                {COMMAND}
               </span>
             </li>
-          ))}
-        </ol>
-      </Reveal>
+            {PRINCIPLES.map((p) => (
+              <li key={p.title} data-line className="grid grid-cols-[64px_1fr] gap-x-3 md:grid-cols-[74px_1fr]">
+                <span data-status className="text-carmim-light">
+                  [ OK ]
+                </span>
+                <span>
+                  <span className="text-bone">{p.title}</span>
+                  <span className="block text-ash">
+                    <span aria-hidden="true">{"// "}</span>
+                    {p.text}
+                  </span>
+                </span>
+              </li>
+            ))}
+            <li data-done aria-hidden="true" className="text-ash">
+              <span className="text-carmim-light">✓</span> 4 princípios carregados
+              <span className="mt-4 block">
+                <span className="text-carmim-light">$</span> <span className="terminal-cursor">_</span>
+              </span>
+            </li>
+          </ol>
+        </div>
+      </div>
     </section>
   );
 }

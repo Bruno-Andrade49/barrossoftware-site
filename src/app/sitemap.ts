@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
       images: [absolute("/opengraph-image.jpg")],
     },
+    { url: absolute("/privacidade"), lastModified: now, changeFrequency: "yearly" as const, priority: 0.2 },
     ...cases.map((c) => ({
       url: absolute(`/trabalhos/${c.slug}`),
       lastModified: now,

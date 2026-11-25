@@ -50,7 +50,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       onClick={toggle}
       aria-label={light ? "Mudar para o modo escuro" : "Mudar para o modo claro"}
       aria-pressed={light}
-      className={`grid size-10 place-items-center rounded-full border border-white/15 text-bone transition-colors duration-300 hover:border-carmim-light/60 ${className}`}
+      className={`glass-chip grid size-10 place-items-center rounded-full text-bone ${className}`}
     >
       <svg
         viewBox="0 0 20 20"

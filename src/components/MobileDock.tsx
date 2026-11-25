@@ -47,7 +47,7 @@ export function MobileDock() {
         shown ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-[160%] opacity-0"
       }`}
     >
-      <div className="flex items-center justify-between gap-3 rounded-full border border-white/10 bg-black/55 py-1.5 pr-1.5 pl-5 shadow-[0_20px_50px_-12px_rgb(0_0_0/0.6)] backdrop-blur-xl">
+      <div className="glass glass-refract flex items-center justify-between gap-3 rounded-full py-1.5 pr-1.5 pl-5">
         <span className="mono-label flex min-w-0 items-center gap-2.5 text-bone">
           <span className="relative flex size-1.5 shrink-0">
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-carmim-light opacity-75" />
