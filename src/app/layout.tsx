@@ -6,6 +6,8 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { Cursor } from "@/components/Cursor";
 import { LiquidGlass } from "@/components/LiquidGlass";
 import { SiteOnly } from "@/components/SiteOnly";
+import { Boot } from "@/components/Boot";
+import { bootScript } from "@/lib/boot";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { siteUrl } from "@/lib/seo";
@@ -66,7 +68,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="pt-BR" className={`${plexMono.variable} ${interTight.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: themeScript + bootScript }} />
       </head>
       <body className="min-h-dvh">
         <a
@@ -77,6 +79,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </a>
         <LiquidGlass />
         <SiteOnly>
+          <Boot />
           <SmoothScroll />
           <Cursor />
           <Nav />

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import { gsap } from "@/lib/motion";
+import { isBooting, whenBooted } from "@/lib/boot";
 import { LocalClock } from "./LocalClock";
 import { flowBus, readyCount, type FlowStats } from "./ParticleStage";
 
@@ -141,8 +142,10 @@ export function Hero() {
       edit(tl, w2, "", nNoun);
       tl.call(() => caretAt(2, false));
     };
-    call = gsap.delayedCall(4.6, next); // começa depois da entrada do hero
+    // começa depois da entrada do hero (que espera a tela de carregamento, na primeira visita)
+    const unboot = whenBooted(() => (call = gsap.delayedCall(4.6, next)));
     return () => {
+      unboot();
       io.disconnect();
       call?.kill();
       tl?.kill();
@@ -154,9 +157,12 @@ export function Hero() {
     if (!root.current) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    let unboot = () => {};
     const ctx = gsap.context(() => {
       const counter = { v: 0 };
-      const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+      // na primeira visita, monta pausada (os elementos já ficam no estado inicial, sob a tela de carregamento)
+      const tl = gsap.timeline({ defaults: { ease: "expo.out" }, paused: isBooting() });
+      unboot = whenBooted(() => tl.play());
       tl.from(frame.current!.children, { scale: 0, opacity: 0, duration: 1.2, stagger: 0.06 }, 0)
         .from(meta.current!.children, { opacity: 0, y: -10, duration: 1, stagger: 0.07 }, 0.2)
         .from([line1.current, line2.current], { yPercent: 115, duration: 1.5, stagger: 0.12 }, 0.35)
@@ -178,7 +184,10 @@ export function Hero() {
         .from(side.current!.children, { opacity: 0, y: 24, duration: 1.1, stagger: 0.1 }, 0.9)
         .from(footer.current!.children, { opacity: 0, duration: 1, stagger: 0.08 }, 1.2);
     }, root);
-    return () => ctx.revert();
+    return () => {
+      unboot();
+      ctx.revert();
+    };
   }, []);
 
   return (

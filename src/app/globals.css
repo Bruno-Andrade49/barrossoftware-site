@@ -353,6 +353,17 @@
   .logo-caret { animation: none; }
 }
 
+/* Tela de carregamento: só aparece quando o script do <head> marca data-boot="run" (primeira visita) */
+.boot { display: none; }
+html[data-boot="run"] .boot { display: flex; }
+html[data-boot="run"] { overflow: hidden; }
+.boot-log li {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.boot-log li[data-on] { opacity: 1; transform: none; }
+
 /* Cursor do título da hero: mesmo traço da marca, na escala do título */
 .hero-caret {
   display: inline-block;
