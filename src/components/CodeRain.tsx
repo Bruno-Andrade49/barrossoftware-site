@@ -209,6 +209,16 @@ export function CodeRain() {
 
   return (
     <section ref={section} aria-label="O que fazemos" className="relative">
+      {/* Divisas esfumadas: o palco da chuva é opaco; sem isto as partículas da seção vizinha
+          (Serviços, embaixo) começariam num corte reto na borda dele */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -top-[24svh] -z-[1] h-[24svh] bg-gradient-to-b from-transparent to-void"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -bottom-[36svh] -z-[1] h-[36svh] bg-gradient-to-t from-transparent via-void/70 to-void"
+      />
       <p className="sr-only">{ITEMS.join(", ")}</p>
       <div
         ref={stage}

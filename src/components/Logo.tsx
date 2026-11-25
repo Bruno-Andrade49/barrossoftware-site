@@ -1,22 +1,22 @@
 import Link from "next/link";
 
-/** Marca provisória: um "B" fragmentado em dois triângulos, ecoando as partículas do hero. */
-export function LogoMark({ className = "size-6" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
-      <path d="M4 2 L18 9 L4 12 Z" fill="#C8102E" />
-      <path d="M4 12 L20 15.5 L4 22 Z" fill="#C8102E" opacity="0.65" />
-    </svg>
-  );
-}
-
+/**
+ * Marca: "barros|software" — o cursor do editor piscando entre as duas palavras,
+ * como um nome de função esperando a próxima letra.
+ */
 export function Logo() {
   return (
-    <Link href="/" className="flex items-center gap-2.5" aria-label="BarrosSoftware, página inicial">
-      <LogoMark />
-      <span className="text-[17px] font-semibold tracking-[-0.02em]">
-        Barros<span className="font-extralight">Software</span>
-      </span>
+    <Link
+      href="/"
+      className="flex items-center text-[19px] leading-none tracking-[-0.03em] [font-family:var(--font-display)]"
+      aria-label="BarrosSoftware, página inicial"
+    >
+      <span className="font-bold">barros</span>
+      <span
+        aria-hidden="true"
+        className="logo-caret mx-[0.08em] inline-block h-[0.82em] w-[0.08em] translate-y-[0.04em] bg-carmim"
+      />
+      <span className="font-light">software</span>
     </Link>
   );
 }

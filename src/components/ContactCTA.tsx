@@ -5,6 +5,7 @@ import { site, whatsappUrl } from "@/content/site";
 import { ContactForm } from "./ContactForm";
 import { LocalClock } from "./LocalClock";
 import { Reveal } from "./Reveal";
+import { SectionLabel } from "./SectionLabel";
 
 /**
  * Contato: composição centrada. As partículas (forma "halo") viram um horizonte de linhas que
@@ -37,10 +38,7 @@ export function ContactCTA() {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] md:inset-x-[-4%] md:h-[34%]"
       />
       <Reveal className="relative mx-auto flex w-full max-w-[1100px] flex-col items-center text-center">
-        <p className="mono-label flex items-center gap-4 text-ash">
-          <span className="text-carmim-light">(06)</span>
-          <span>Contato</span>
-        </p>
+        <SectionLabel n="06" label="Contato" desc="Resposta em até um dia útil, com os próximos passos." center />
 
         <h2
           id="contato-titulo"

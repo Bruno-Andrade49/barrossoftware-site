@@ -34,6 +34,8 @@ export function Hero() {
   const readout = useRef<HTMLDListElement>(null);
   const word1 = useRef<HTMLSpanElement>(null);
   const word2 = useRef<HTMLSpanElement>(null);
+  const caret1 = useRef<HTMLSpanElement>(null);
+  const caret2 = useRef<HTMLSpanElement>(null);
   const line1 = useRef<HTMLSpanElement>(null);
   const line2 = useRef<HTMLSpanElement>(null);
   const side = useRef<HTMLDivElement>(null);
@@ -78,35 +80,72 @@ export function Hero() {
     };
   });
 
-  // Troca do título a cada poucos segundos, com o mesmo embaralhamento da entrada.
+  // Troca do título como num editor: o cursor apaga a frase de trás para a frente e digita a próxima.
+  // O cursor fica parado (aceso) enquanto digita e pisca quando para, como o da marca.
   // Pausa quando o hero sai da tela ou a aba fica em segundo plano.
   useEffect(() => {
     const el = root.current;
     const w1 = word1.current;
     const w2 = word2.current;
-    if (!el || !w1 || !w2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const c1 = caret1.current;
+    const c2 = caret2.current;
+    if (!el || !w1 || !w2 || !c1 || !c2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let visible = true;
     let index = 0;
     let call: gsap.core.Tween | null = null;
+    let tl: gsap.core.Timeline | null = null;
     const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0.25 });
     io.observe(el);
+
+    // cursor na linha 1 ou 2; "typing" segura o cursor aceso
+    const caretAt = (line: 1 | 2, typing: boolean) => {
+      c1.style.display = line === 1 ? "" : "none";
+      c2.style.display = line === 2 ? "" : "none";
+      for (const c of [c1, c2]) c.classList.toggle("is-typing", typing);
+    };
+    // apaga ou digita trocando o texto letra a letra
+    const edit = (t: gsap.core.Timeline, target: HTMLElement, from: string, to: string) => {
+      const erase = to.length < from.length;
+      const text = erase ? from : to;
+      const p = { n: erase ? from.length : 0 };
+      t.to(p, {
+        n: erase ? 0 : to.length,
+        duration: text.length * (erase ? 0.045 : 0.085),
+        ease: "none",
+        onUpdate: () => {
+          target.textContent = text.slice(0, Math.round(p.n));
+        },
+      });
+    };
+
     const next = () => {
-      if (visible && !document.hidden) {
-        index = (index + 1) % HEADLINES.length;
-        const [verb, noun] = HEADLINES[index];
-        gsap.to(w1, { duration: 1, scrambleText: { text: verb, chars: GLYPHS, revealDelay: 0.2, speed: 0.6 } });
-        gsap.to(w2, {
-          duration: 1.2,
-          delay: 0.12,
-          scrambleText: { text: noun, chars: GLYPHS, revealDelay: 0.25, speed: 0.6 },
-        });
+      if (!visible || document.hidden) {
+        call = gsap.delayedCall(1, next);
+        return;
       }
-      call = gsap.delayedCall(3.4, next);
+      const [verb, noun] = HEADLINES[index];
+      index = (index + 1) % HEADLINES.length;
+      const [nVerb, nNoun] = HEADLINES[index];
+      tl = gsap.timeline({
+        onComplete: () => {
+          call = gsap.delayedCall(2.8, next);
+        },
+      });
+      tl.call(() => caretAt(2, true));
+      edit(tl, w2, noun, "");
+      tl.call(() => caretAt(1, true));
+      edit(tl, w1, verb, "");
+      tl.to({}, { duration: 0.18 });
+      edit(tl, w1, "", nVerb);
+      tl.call(() => caretAt(2, true));
+      edit(tl, w2, "", nNoun);
+      tl.call(() => caretAt(2, false));
     };
     call = gsap.delayedCall(4.6, next); // começa depois da entrada do hero
     return () => {
       io.disconnect();
       call?.kill();
+      tl?.kill();
       gsap.killTweensOf([w1, w2]);
     };
   }, []);
@@ -237,12 +276,14 @@ export function Hero() {
             <span className="line-mask block">
               <span ref={line1} className="block" aria-hidden="true">
                 <span ref={word1}>Move</span>
+                <span ref={caret1} className="hero-caret logo-caret" style={{ display: "none" }} />
               </span>
             </span>
             <span className="line-mask block">
               <span ref={line2} className="block" aria-hidden="true">
                 <span ref={word2}>negócios</span>
-                <span className="text-carmim">.</span>
+                {/* o cursor da marca no lugar do ponto final */}
+                <span ref={caret2} className="hero-caret logo-caret" />
               </span>
             </span>
           </h1>

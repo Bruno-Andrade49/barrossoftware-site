@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { process as etapas } from "@/content/site";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
+import { SectionLabel } from "./SectionLabel";
 
 /**
  * Processo: quatro etapas lado a lado. Um cabo de linhas (partículas, forma "path") atravessa a seção
@@ -29,11 +30,7 @@ export function Process() {
 
   return (
     <section id="processo" data-form="path" className="relative px-4 py-28 md:px-12 md:py-40" aria-labelledby="processo-titulo">
-      <div className="mono-label flex items-center gap-4 text-ash">
-        <span className="text-carmim-light">(04)</span>
-        <span>Processo</span>
-        <span className="h-px flex-1 bg-white/10" aria-hidden="true" />
-      </div>
+      <SectionLabel n="04" label="Processo" desc="Quatro etapas, com entrega para testar toda semana." />
 
       <div className="mt-10 grid gap-8 md:grid-cols-12 md:items-end">
         <h2

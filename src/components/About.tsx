@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
+import { SectionLabel } from "./SectionLabel";
 
 gsap.registerPlugin(ScrambleTextPlugin);
 
@@ -88,12 +89,7 @@ export function About() {
         className="pointer-events-none absolute inset-0 -z-[1] bg-[radial-gradient(45%_50%_at_72%_55%,rgb(200_16_46/0.14),transparent_70%)]"
       />
 
-      <div className="mono-label flex items-center gap-4 text-ash">
-        <span className="text-carmim-light">(01)</span>
-        <span>A empresa</span>
-        <span className="h-px flex-1 bg-white/10" aria-hidden="true" />
-        <span className="hidden sm:inline">sys://barros</span>
-      </div>
+      <SectionLabel n="01" label="A empresa" desc="Quem desenha e quem programa, do rascunho ao sistema no ar." extra="sys://barros" />
 
       <div className="mt-12 grid gap-12 md:grid-cols-12 md:items-center md:gap-10">
         <div className="md:col-span-5">

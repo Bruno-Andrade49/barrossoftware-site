@@ -4,6 +4,7 @@ import { useRef, type MouseEvent } from "react";
 import { faq } from "@/content/site";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 import { Reveal } from "./Reveal";
+import { SectionLabel } from "./SectionLabel";
 
 const D = { duration: 0.55, ease: "power3.inOut" };
 
@@ -60,10 +61,7 @@ export function Faq() {
     >
       <div className="grid gap-12 md:grid-cols-12">
         <div className="md:col-span-5">
-          <div className="mono-label flex items-center gap-4 text-ash">
-            <span className="text-carmim-light">(05)</span>
-            <span>Perguntas</span>
-          </div>
+          <SectionLabel n="05" label="Perguntas" desc="O que mais perguntam antes de começar." rule={false} />
           <h2
             id="perguntas-titulo"
             className="mt-8 text-[clamp(40px,4.6vw,80px)] leading-[0.98] font-medium tracking-[-0.042em]"

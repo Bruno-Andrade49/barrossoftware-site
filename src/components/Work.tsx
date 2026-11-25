@@ -6,6 +6,7 @@ import { Observer } from "gsap/Observer";
 import { cases } from "@/content/cases";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 import { ProjectClip } from "./ProjectClip";
+import { SectionLabel } from "./SectionLabel";
 
 gsap.registerPlugin(Observer);
 
@@ -148,10 +149,7 @@ export function Work() {
         >
           {/* Abertura do trilho */}
           <div className="flex w-[88vw] shrink-0 flex-col justify-center px-5 md:w-[42vw] md:pr-0 md:pl-12">
-            <div className="mono-label flex items-center gap-4 text-ash">
-              <span className="text-carmim-light">(03)</span>
-              <span>Trabalhos</span>
-            </div>
+            <SectionLabel n="03" label="Trabalhos" desc="Sites, sistemas e lojas em produção." rule={false} />
             <h2
               id="trabalhos-titulo"
               className="mt-8 text-[clamp(44px,4.6vw,80px)] leading-[0.98] font-medium tracking-[-0.042em]"
