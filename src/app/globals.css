@@ -249,6 +249,18 @@
   }
 }
 
+/* Brilho carmim do topo das páginas de case: respira devagar */
+.case-glow {
+  animation: case-glow 9s ease-in-out infinite alternate;
+}
+@keyframes case-glow {
+  from { opacity: 0.75; transform: translate3d(-2%, 0, 0) scale(1); }
+  to { opacity: 1; transform: translate3d(2%, 2%, 0) scale(1.06); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .case-glow { animation: none; }
+}
+
 /* Dock do celular: o rótulo da seção entra de baixo ao trocar */
 .dock-label {
   animation: dock-label 0.5s cubic-bezier(0.22, 1, 0.36, 1);

@@ -15,6 +15,7 @@ export function Nav() {
   const button = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
+  const closing = useRef<gsap.core.Timeline | null>(null);
 
   // Depois do hero, a barra ganha fundo desfocado para não brigar com o conteúdo.
   useEffect(() => {
@@ -57,12 +58,30 @@ export function Nav() {
 
   useEffect(() => {
     const root = document.documentElement;
+    const el = panel.current;
+    const parts = el ? el.querySelectorAll("[data-menu-item], [data-menu-foot] > *") : [];
     if (open) {
-      tl.current?.timeScale(1).play();
+      closing.current?.kill();
+      if (parts.length) gsap.set(parts, { clearProps: "opacity,y" });
+      tl.current?.restart();
       root.dataset.menu = "open";
     } else {
-      tl.current?.timeScale(1.8).reverse();
       delete root.dataset.menu;
+      // Fechar: em vez de encolher o círculo (o fundo sumia antes dos textos e o site aparecia por trás),
+      // os itens somem primeiro e depois o painel inteiro esmaece de uma vez, fundo e texto juntos.
+      if (el && tl.current && tl.current.progress() > 0) {
+        closing.current = gsap
+          .timeline({
+            onComplete: () => {
+              gsap.set(parts, { clearProps: "opacity,y" });
+              tl.current?.pause(0);
+              gsap.set(el, { autoAlpha: 0 });
+            },
+          })
+          .to(parts, { opacity: 0, y: -10, duration: 0.18, stagger: 0.012, ease: "power2.in" })
+          // só depois que todo texto sumiu: o fundo esmaece sozinho, sem texto do menu sobre o site
+          .to(el, { autoAlpha: 0, duration: 0.3, ease: "power2.out" });
+      }
     }
     document.body.style.overflow = open ? "hidden" : "";
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);

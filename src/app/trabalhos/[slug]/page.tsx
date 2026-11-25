@@ -8,6 +8,7 @@ import { Reveal } from "@/components/Reveal";
 import { cases, getCase, isFilled } from "@/content/cases";
 import { whatsappUrl } from "@/content/site";
 import { JsonLd } from "@/components/JsonLd";
+import { ParticleStage } from "@/components/ParticleStage";
 import { caseSchema } from "@/lib/schema";
 import { clip } from "@/lib/seo";
 
@@ -83,8 +84,15 @@ export default async function CasePage({ params }: PageProps) {
   return (
     <article className="relative">
       <JsonLd data={caseSchema(item)} />
+      {/* Fundo vivo: o mesmo palco de partículas da home (corrente na abertura, campo calmo no resto
+          e o BARROS no rodapé), mais um brilho carmim no topo */}
+      <ParticleStage />
+      <div
+        aria-hidden="true"
+        className="case-glow pointer-events-none absolute inset-x-0 top-0 -z-[1] h-[110svh] bg-[radial-gradient(60%_55%_at_70%_0%,rgb(200_16_46/0.22),transparent_70%),radial-gradient(45%_40%_at_10%_20%,rgb(200_16_46/0.08),transparent_70%)]"
+      />
       {/* Abertura */}
-      <header className="px-4 pt-32 md:px-12 md:pt-40">
+      <header data-form="flow" className="relative px-4 pt-32 md:px-12 md:pt-40">
         {/* Trilha de navegação (a mesma do JSON-LD BreadcrumbList) */}
         <nav aria-label="Trilha de navegação" className="mono-label text-ash">
           <ol className="flex flex-wrap items-center gap-2">
@@ -141,7 +149,7 @@ export default async function CasePage({ params }: PageProps) {
       </header>
 
       {/* O site rodando: computador com o celular sobreposto */}
-      <section aria-label="O site em funcionamento" className="px-4 pt-12 md:px-12 md:pt-16">
+      <section data-form="drift" aria-label="O site em funcionamento" className="px-4 pt-12 md:px-12 md:pt-16">
         <div className="relative">
           <ProjectClip item={item} variant="desktop" className="w-full rounded-2xl ring-1 ring-white/10 md:rounded-3xl" />
           <div className="absolute right-6 -bottom-14 hidden h-[72%] drop-shadow-[0_30px_50px_rgb(0_0_0/0.7)] md:block lg:right-12">
@@ -157,7 +165,7 @@ export default async function CasePage({ params }: PageProps) {
 
       {/* Desafio, solução, resultado */}
       {blocks.length > 0 && (
-        <section aria-label="Sobre o projeto" className="px-4 pt-24 md:px-12 md:pt-40">
+        <section data-form="drift" aria-label="Sobre o projeto" className="px-4 pt-24 md:px-12 md:pt-40">
           <Reveal className="grid gap-12 border-t border-white/10 pt-12 md:grid-cols-3 md:gap-10">
             {blocks.map((b, i) => (
               <div key={b.label}>
@@ -172,7 +180,7 @@ export default async function CasePage({ params }: PageProps) {
 
       {/* Telas principais */}
       {item.gallery.length > 0 && (
-        <section aria-labelledby="telas-titulo" className="px-4 pt-24 md:px-12 md:pt-40">
+        <section data-form="drift" aria-labelledby="telas-titulo" className="px-4 pt-24 md:px-12 md:pt-40">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <h2
               id="telas-titulo"
@@ -210,7 +218,7 @@ export default async function CasePage({ params }: PageProps) {
       )}
 
       {/* Contato */}
-      <section className="px-4 py-28 text-center md:px-12 md:py-40">
+      <section data-form="drift" className="px-4 py-28 text-center md:px-12 md:py-40">
         <h2 className="text-[clamp(36px,4.8vw,80px)] leading-[0.98] font-medium tracking-[-0.045em]">
           Quer um projeto
           <br />
