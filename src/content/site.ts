@@ -19,7 +19,7 @@ export const business: Business = {
   cnpj: "", // PREENCHER: ex.: "00.000.000/0001-00" (aparece no rodapé e na política de privacidade)
   /** Domínio oficial, sem barra no fim. Também é o destino do redirecionamento 301 do www. */
   domain: "https://barrossoftware.com.br", // PREENCHER
-  phone: "", // PREENCHER: como no Google, ex.: "+55 83 99999-9999"
+  phone: "+55 83 98212-1351", // igual ao perfil do Google, quando existir
   address: {
     street: "", // PREENCHER (deixe vazio se o perfil esconde o endereço)
     district: "",
@@ -37,12 +37,12 @@ export const site = {
   tagline: "Empresa de software · Brasil",
   contact: {
     email: "contato@barrossoftware.com.br", // PREENCHER
-    whatsapp: "5500000000000", // PREENCHER: DDI + DDD + número, só dígitos
+    whatsapp: "5583982121351", // DDI + DDD + número, só dígitos
   },
   social: [
-    { label: "LinkedIn", href: "https://www.linkedin.com/" }, // PREENCHER
-    { label: "GitHub", href: "https://github.com/" }, // PREENCHER
-    { label: "Instagram", href: "https://www.instagram.com/" }, // PREENCHER
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/bruno-andrade-386b331b6/" },
+    { label: "GitHub", href: "https://github.com/Bruno-Andrade49" },
+    { label: "Instagram", href: "https://www.instagram.com/brunoandradee__/" },
   ],
 } as const;
 

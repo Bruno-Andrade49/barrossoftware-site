@@ -52,7 +52,7 @@ export const cases: Case[] = [
       "Reunir geossítios, roteiros e conteúdo educativo num portal rápido, acessível e fácil de atualizar pela equipe.",
     solution:
       "Site estático com conteúdo organizado por geossítio, páginas otimizadas para busca e foco em acessibilidade.",
-    stack: ["Astro", "TypeScript", "Playwright", "Vercel"],
+    stack: ["Astro", "TypeScript", "Playwright", "Vitest"],
     results: ["Lighthouse acima de 90", "Conteúdo editável pela equipe"], // PREENCHER com números reais
     ...media("geoparque"),
     url: "https://geoparque-cariri.vercel.app",
@@ -76,7 +76,7 @@ export const cases: Case[] = [
     // REVISAR: descrito a partir da gravação do site
     solution:
       "Site institucional com a equipe, os serviços, um espaço para o trabalho em vídeo, as comunidades que a produtora acompanha e um formulário de contato.",
-    stack: ["Vercel"], // PREENCHER
+    stack: ["Vue", "Vite", "Tailwind"],
     results: ["PREENCHER"],
     ...media("conecta"),
     url: "https://conecta-one-zeta.vercel.app",
@@ -99,7 +99,7 @@ export const cases: Case[] = [
     challenge: "Vender online sem taxa de marketplace e sem complicar a rotina de quem produz.",
     solution:
       "Catálogo com carrinho que monta o pedido e envia pelo WhatsApp, mais um painel para a dona atualizar produtos e preços.",
-    stack: ["Next.js", "Supabase", "Tailwind"],
+    stack: ["Next.js", "React", "Supabase", "Tailwind", "TypeScript"],
     results: ["Pedidos organizados no WhatsApp", "Painel próprio de produtos"], // PREENCHER
     ...media("malu"),
     url: "https://malu-cookies-psi.vercel.app",

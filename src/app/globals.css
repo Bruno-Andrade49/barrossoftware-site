@@ -363,6 +363,40 @@
   background: var(--color-carmim);
 }
 
+/* Barra de rolagem: trilho na cor do fundo e polegar carmim fino, que acende ao passar o mouse */
+html {
+  scrollbar-gutter: stable;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--c-void);
+  border-left: 1px solid color-mix(in oklab, var(--c-bone) 6%, transparent);
+}
+::-webkit-scrollbar-thumb {
+  /* a borda transparente afina o polegar sem mudar a área de clique */
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, var(--color-carmim), color-mix(in oklab, var(--color-carmim) 55%, var(--c-void)))
+    padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  border-width: 2px;
+  background: var(--c-carmim-light) padding-box;
+}
+::-webkit-scrollbar-corner {
+  background: var(--c-void);
+}
+/* Firefox não lê os seletores acima: usa as propriedades padrão */
+@supports (-moz-appearance: none) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-carmim) var(--c-void);
+  }
+}
+
 /* Brilho carmim do topo das páginas de case: respira devagar */
 .case-glow {
   animation: case-glow 9s ease-in-out infinite alternate;

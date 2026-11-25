@@ -71,12 +71,14 @@ export function Footer() {
         </span>
       </div>
 
-      {/* Marca gigante em texto sólido (metálico, como os outros títulos grandes) */}
+      {/* Marca gigante em texto sólido (metálico, como os outros títulos grandes), com o cursor da marca */}
       <p
         aria-hidden="true"
-        className="display fill-chrome mt-10 text-center font-sans tracking-[-0.055em] text-[19vw] leading-[0.9] select-none"
+        className="display pointer-events-none mt-10 text-center font-sans tracking-[-0.055em] text-[19vw] leading-[0.9] select-none"
       >
-        BARROS
+        {/* inline-block: o preenchimento vertical não invade os links de cima, e o pr cobre a curva do S */}
+        <span className="fill-chrome inline-block pr-[0.05em]">BARROS</span>
+        <span className="hero-caret logo-caret" />
       </p>
     </footer>
   );
