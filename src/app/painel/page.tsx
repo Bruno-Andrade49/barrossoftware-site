@@ -55,7 +55,7 @@ export default async function PainelPage() {
           Novo projeto <span aria-hidden="true">+</span>
         </Link>
       </PainelHeader>
-      <main className="mx-auto max-w-[1180px] px-4 py-12 md:px-8 md:py-16">
+      <main className="mx-auto max-w-[1180px] px-4 pt-10 pb-28 md:px-8 md:py-16">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
             <p className="mono-label text-carmim-light">(03) Trabalhos</p>
@@ -76,6 +76,13 @@ export default async function PainelPage() {
           <ProjectList rows={rows} />
         )}
       </main>
+      {/* celular: o botão principal fica ao alcance do polegar */}
+      <Link
+        href="/painel/projetos/novo"
+        className="btn-glow fixed right-4 bottom-[calc(16px+env(safe-area-inset-bottom))] z-30 md:hidden"
+      >
+        Novo projeto <span aria-hidden="true">+</span>
+      </Link>
     </>
   );
 }

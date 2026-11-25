@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { saveProject, type ProjectInput } from "../actions";
 import { readImage, readVideo, slugify, uploadFile } from "./media";
-import { Field, Section, chipClass, inputClass } from "./ui";
+import { Field, Section, chipClass, iconChipClass, inputClass, textareaClass } from "./ui";
 
 const TYPES = ["Site institucional", "Portal institucional", "Landing page", "Loja online", "Sistema web", "App mobile", "Automação", "Integração"];
 const STACK_HINTS = ["Next.js", "React", "Vue", "Astro", "Vite", "TypeScript", "Tailwind", "Node.js", "Supabase", "PostgreSQL", "Prisma", "React Native", "Expo", "Python", "Playwright", "Vitest", "Stripe", "OpenAI"];
@@ -71,7 +71,7 @@ export function ProjectForm({ id, initial }: { id: string | null; initial: Proje
         e.preventDefault();
         submit();
       }}
-      className="pb-32"
+      className="pb-40 md:pb-32"
     >
       <Section n="01" title="Identificação" desc="Como o projeto aparece na lista de trabalhos e no endereço da página.">
         <div className="grid gap-6 md:grid-cols-2">
@@ -121,17 +121,17 @@ export function ProjectForm({ id, initial }: { id: string | null; initial: Proje
 
       <Section n="02" title="Textos" desc="O que o projeto é e o que resolveu. Frases curtas, na linguagem do cliente.">
         <Field label="Descrição curta *" hint={<Count value={p.description} max={600} note="Aparece ao lado do vídeo na home e no topo da página do case." />}>
-          <textarea rows={3} maxLength={600} value={p.description} onChange={(e) => set({ description: e.target.value })} className={inputClass} />
+          <textarea rows={4} maxLength={600} value={p.description} onChange={(e) => set({ description: e.target.value })} className={textareaClass} />
         </Field>
         <Field label="Resumo de uma linha" hint={<Count value={p.summary} max={200} note="Usado em listas e para buscadores e IAs." />}>
           <input maxLength={200} value={p.summary} onChange={(e) => set({ summary: e.target.value })} className={inputClass} />
         </Field>
         <div className="grid gap-6 md:grid-cols-2">
           <Field label="O desafio" hint="O problema que o cliente trouxe. Vazio = o bloco não aparece.">
-            <textarea rows={5} maxLength={1200} value={p.challenge} onChange={(e) => set({ challenge: e.target.value })} className={inputClass} />
+            <textarea rows={6} maxLength={1200} value={p.challenge} onChange={(e) => set({ challenge: e.target.value })} className={textareaClass} />
           </Field>
           <Field label="O que construímos" hint="A solução, em poucas frases.">
-            <textarea rows={5} maxLength={1200} value={p.solution} onChange={(e) => set({ solution: e.target.value })} className={inputClass} />
+            <textarea rows={6} maxLength={1200} value={p.solution} onChange={(e) => set({ solution: e.target.value })} className={textareaClass} />
           </Field>
         </div>
         <ListEditor
@@ -208,41 +208,42 @@ export function ProjectForm({ id, initial }: { id: string | null; initial: Proje
         />
       </Section>
 
-      {/* Barra de ações fixa */}
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-void/85 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-3 px-4 py-4 md:px-8">
-          <p role="status" className={`mono-label ${status.kind === "error" ? "text-carmim-light" : "text-ash"}`}>
+      {/* Barra de ações fixa (no celular: status em cima, botões numa linha só) */}
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-void/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
+        <div className="mx-auto flex max-w-[1180px] flex-col gap-3 px-4 py-3 md:flex-row md:items-center md:justify-between md:px-8 md:py-4">
+          <p role="status" className={`mono-label truncate ${status.kind === "error" ? "text-carmim-light" : "text-ash"}`}>
             {uploads > 0
               ? "Enviando arquivos…"
               : status.kind === "saving"
                 ? "Salvando…"
                 : (status.text ?? (p.published ? "● Publicado no site" : "○ Rascunho: só aparece aqui"))}
           </p>
-          <div className="flex flex-wrap items-center gap-2">
-            <Link href="/painel" className={chipClass}>
-              Voltar
+          <div className="flex items-center gap-2">
+            <Link href="/painel" className={iconChipClass} aria-label="Voltar para a lista" title="Voltar">
+              ←
             </Link>
             {id && p.published && (
-              <Link href={`/trabalhos/${p.slug}`} target="_blank" className={chipClass}>
-                Ver no site ↗
+              <Link href={`/trabalhos/${p.slug}`} target="_blank" className={iconChipClass} aria-label="Ver no site" title="Ver no site">
+                ↗
               </Link>
             )}
             {p.published ? (
-              <button type="button" disabled={uploads > 0 || status.kind === "saving"} onClick={() => submit(false)} className={chipClass}>
+              <button type="button" disabled={uploads > 0 || status.kind === "saving"} onClick={() => submit(false)} className={`${chipClass} flex-1 md:flex-none`}>
                 Despublicar
               </button>
             ) : (
-              <button type="submit" disabled={uploads > 0 || status.kind === "saving"} className={chipClass}>
-                Salvar rascunho
+              <button type="submit" disabled={uploads > 0 || status.kind === "saving"} className={`${chipClass} flex-1 md:flex-none`}>
+                <span className="md:hidden">Rascunho</span>
+                <span className="hidden md:inline">Salvar rascunho</span>
               </button>
             )}
             <button
               type="button"
               disabled={uploads > 0 || status.kind === "saving"}
               onClick={() => submit(true)}
-              className="btn-glow !py-2.5 disabled:opacity-60"
+              className="btn-glow h-9 flex-1 justify-center !py-0 disabled:opacity-60 md:flex-none"
             >
-              {p.published ? "Salvar alterações" : "Publicar"} <span aria-hidden="true">→</span>
+              {p.published ? "Salvar" : "Publicar"} <span aria-hidden="true">→</span>
             </button>
           </div>
         </div>
@@ -263,10 +264,10 @@ function ListEditor({ label, hint, items, max, onChange }: { label: string; hint
   return (
     <Field label={label} hint={hint}>
       <textarea
-        rows={Math.max(3, items.length + 1)}
+        rows={4}
         value={items.join("\n")}
         onChange={(e) => onChange(e.target.value.split("\n").slice(0, max))}
-        className={inputClass}
+        className={textareaClass}
       />
     </Field>
   );
