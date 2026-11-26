@@ -150,7 +150,7 @@ export function Work({ cases }: { cases: Case[] }) {
         >
           {/* Abertura do trilho */}
           <div className="flex w-[88vw] shrink-0 flex-col justify-center px-5 md:w-[42vw] md:pr-0 md:pl-12">
-            <SectionLabel n="03" label="Trabalhos" desc="Sites, sistemas e lojas em produção." rule={false} />
+            <SectionLabel n="03" label="Trabalhos" desc="Sites e lojas feitos do zero." rule={false} />
             <h2
               id="trabalhos-titulo"
               className="mt-8 text-[clamp(44px,4.6vw,80px)] leading-[0.98] font-medium tracking-[-0.042em]"
@@ -160,7 +160,7 @@ export function Work({ cases }: { cases: Case[] }) {
               recentes<span className="text-carmim">.</span>
             </h2>
             <p className="mt-8 max-w-[360px] text-[17px] leading-[1.6] font-light text-mist">
-              Projetos que saíram do papel e estão no ar. Role ou arraste para ver cada um.
+              Projetos recentes, feitos do zero para cada cliente. Role ou arraste para ver cada um.
             </p>
             <span className="mono-label mt-10 flex items-center gap-3 text-ash" aria-hidden="true">
               <span className="relative h-px w-16 overflow-hidden bg-white/15">

@@ -16,7 +16,7 @@ type Business = {
 
 export const business: Business = {
   name: "BarrosSoftware", // PREENCHER: nome exatamente como no Google
-  cnpj: "", // PREENCHER: ex.: "00.000.000/0001-00" (aparece no rodapé e na política de privacidade)
+  cnpj: "55.342.833/0001-22", // aparece no rodapé e na política de privacidade
   /** Domínio oficial, sem barra no fim. Também é o destino do redirecionamento 301 do www. */
   domain: "https://barrossoftware.com.br", // PREENCHER
   phone: "+55 83 98212-1351", // igual ao perfil do Google, quando existir
@@ -42,7 +42,7 @@ export const site = {
   social: [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/bruno-andrade-386b331b6/" },
     { label: "GitHub", href: "https://github.com/Bruno-Andrade49" },
-    { label: "Instagram", href: "https://www.instagram.com/brunoandradee__/" },
+    { label: "Instagram", href: "https://www.instagram.com/barros_software/" },
   ],
 } as const;
 
@@ -55,6 +55,30 @@ export const whatsappUrl = `https://wa.me/${site.contact.whatsapp}?text=${encode
   "Olá! Vim pelo site e quero conversar sobre um projeto.",
 )}`;
 
+/**
+ * Fundador, na seção A empresa. O bloco só aparece com a foto preenchida
+ * (arquivo em /public/images, ex.: "/images/bruno.webp", de preferência quadrado e com pelo menos 400 px).
+ */
+export const founder = {
+  name: "Bruno Andrade",
+  role: "Fundador · design e desenvolvimento",
+  photo: "/images/sobre/bruno.webp",
+  quote: "Eu desenho e programo cada projeto. Você fala direto comigo, do primeiro rascunho ao suporte depois do lançamento.",
+};
+
+/**
+ * Clientes na faixa "Quem já confiou" (logo de cada um em /public/images/clientes, SVG ou WebP,
+ * com autorização do cliente). A faixa só aparece com dois ou mais logos.
+ */
+export const clients: { name: string; logo: string }[] = [
+  // { name: "Geoparque Cariri", logo: "/images/clientes/geoparque.svg" },
+];
+
+/** Depoimentos dos clientes. A seção só aparece quando houver pelo menos um. */
+export const testimonials: { quote: string; name: string; role: string; company: string }[] = [
+  // { quote: "…", name: "Nome", role: "Cargo", company: "Empresa" },
+];
+
 export const nav = [
   { label: "Serviços", href: "/#servicos" },
   { label: "Trabalhos", href: "/#trabalhos" },
@@ -62,30 +86,38 @@ export const nav = [
   { label: "Sobre", href: "/#sobre" },
 ] as const;
 
+/**
+ * Serviços na ordem do que o portfólio já mostra. As tags dizem o que o cliente recebe (as tecnologias
+ * ficam nos cases); "audience" é para quem aquele serviço é.
+ */
 export const services = [
   {
     number: "01",
-    title: "Sistemas web sob medida",
-    text: "Painéis, plataformas e sistemas internos desenhados em cima do jeito que a sua empresa trabalha. Nada de adaptar o negócio a uma planilha ou a um software de prateleira.",
-    tags: ["Next.js", "APIs", "Banco de dados", "Painel admin"],
+    title: "Sites e landing pages",
+    audience: "Para quem quer ser encontrado e chamado.",
+    text: "Sites rápidos, bem posicionados no Google e feitos para transformar visita em contato.",
+    tags: ["Aparece no Google", "Rápido no celular", "Gera contato"],
   },
   {
     number: "02",
-    title: "Apps mobile",
-    text: "Aplicativos para Android e iOS com uma base de código, publicados nas lojas e conectados ao seu sistema.",
-    tags: ["React Native", "Android", "iOS"],
+    title: "Sistemas web sob medida",
+    audience: "Para quem já não cabe numa planilha.",
+    text: "Painéis, plataformas e sistemas internos desenhados em cima do jeito que a sua empresa trabalha. Nada de adaptar o negócio a uma planilha ou a um software de prateleira.",
+    tags: ["Painel próprio", "Acesso por usuário", "Relatórios"],
   },
   {
     number: "03",
-    title: "Sites e landing pages",
-    text: "Sites rápidos, bem posicionados no Google e feitos para transformar visita em contato.",
-    tags: ["SEO", "Performance", "Design"],
+    title: "Automação e IA",
+    audience: "Para quem perde horas com tarefa repetida.",
+    text: "Integrações entre sistemas, robôs que tiram tarefas repetitivas da sua equipe e assistentes com IA treinados no seu negócio.",
+    tags: ["Menos trabalho manual", "Atendimento no WhatsApp", "Sistemas conversando"],
   },
   {
     number: "04",
-    title: "Automação e IA",
-    text: "Integrações entre sistemas, robôs que tiram tarefas repetitivas da sua equipe e assistentes com IA treinados no seu negócio.",
-    tags: ["Integrações", "WhatsApp", "IA"],
+    title: "Apps mobile",
+    audience: "Para quem quer estar no bolso do cliente.",
+    text: "Aplicativos para Android e iOS com uma base de código, publicados nas lojas e conectados ao seu sistema.",
+    tags: ["Android e iOS", "Publicado nas lojas", "Ligado ao seu sistema"],
   },
 ] as const;
 
@@ -120,7 +152,7 @@ export const faq = [
   },
   {
     q: "Que tipo de software vocês fazem?",
-    a: "Sistemas web sob medida, aplicativos para Android e iOS, sites e landing pages, e automações com integrações e inteligência artificial.",
+    a: "Sites e landing pages, sistemas web sob medida, automações com integrações e inteligência artificial, e aplicativos para Android e iOS.",
   },
   {
     q: "Como eu começo?",

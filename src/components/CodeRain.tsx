@@ -8,19 +8,19 @@ import { gsap, prefersReducedMotion } from "@/lib/motion";
 gsap.registerPlugin(ScrambleTextPlugin);
 
 const ITEMS = [
-  "Sistemas web",
-  "Apps mobile",
   "Sites",
+  "Sistemas web",
   "Automação",
   "Inteligência artificial",
   "Integrações",
+  "Apps mobile",
 ];
 const GLYPHS =
   "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789<>/{}[]=+*#";
 const pad = (n: number) => String(n).padStart(2, "0");
 
 /**
- * Faixa entre a seção A empresa e Serviços: uma chuva de código (colunas de caracteres caindo, com a
+ * Faixa entre o hero e Serviços: uma chuva de código (colunas de caracteres caindo, com a
  * cabeça clara e o rastro em carmim) e, no meio, o que a empresa faz sendo "decifrado".
  * Guiada pelo scroll: a faixa trava na tela, cada trecho de scroll decifra o próximo serviço, a palavra
  * cresce aos poucos e a chuva acelera com a velocidade da rolagem.
@@ -136,7 +136,10 @@ export function CodeRain() {
       last = t;
       draw();
     };
-    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
+    // threshold acima de zero: só encostar na borda da tela (logo abaixo do hero) não conta como visível
+    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting && e.intersectionRatio > 0), {
+      threshold: [0, 0.01],
+    });
     io.observe(el);
     raf = requestAnimationFrame(loop);
     return () => {

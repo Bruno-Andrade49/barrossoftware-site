@@ -94,8 +94,9 @@ export function Services() {
             <h3 className="display relative mt-auto pt-16 text-[clamp(30px,8.4vw,38px)] text-bone md:pt-24 md:text-[clamp(26px,2.1vw,34px)]">
               {s.title}
             </h3>
+            <p className="mono-label relative mt-3 text-carmim-light">{s.audience}</p>
             <p className="relative mt-4 max-w-[340px] text-[16px] leading-[1.55] font-light text-mist md:mt-5">{s.text}</p>
-            <ul className="relative mt-6 flex flex-wrap gap-2" aria-label="Tecnologias">
+            <ul className="relative mt-6 flex flex-wrap gap-2" aria-label="O que você recebe">
               {s.tags.map((t) => (
                 <li key={t} className="mono-label rounded-full border border-white/15 px-3 py-1.5 text-ash">
                   {t}

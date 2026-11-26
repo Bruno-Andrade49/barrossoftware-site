@@ -4,7 +4,22 @@ import { useIdleEffect } from "@/lib/useIdleEffect";
 import { useRef } from "react";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
+import Image from "next/image";
+import { founder } from "@/content/site";
 import { SectionLabel } from "./SectionLabel";
+import { Reveal } from "./Reveal";
+
+// fotos de bastidores (~1100 px): em P&B com só o vermelho da camiseta (carmim); ao passar o mouse, a versão colorida (`-cor`) aparece
+const SHOTS = [
+  {
+    src: "/images/sobre/bastidores-perfil.webp", w: 1120, h: 1400, alt: "Bruno trabalhando no notebook",
+    caption: "Do rascunho ao ar", fig: "md:col-span-5 md:col-start-2", box: "w-3/4 md:w-auto", sizes: "(min-width: 768px) 40vw, 75vw",
+  },
+  {
+    src: "/images/sobre/bastidores-codigo.webp", w: 1100, h: 1649, alt: "Bruno programando, com o código aberto na tela",
+    caption: "Mão no código", fig: "md:col-span-4 md:col-start-8", box: "ml-auto mt-12 w-2/3 md:mt-40 md:w-auto", sizes: "(min-width: 768px) 32vw, 66vw",
+  },
+];
 
 gsap.registerPlugin(ScrambleTextPlugin);
 
@@ -20,7 +35,7 @@ const PRINCIPLES = [
 ];
 
 /**
- * Seção 01 — A empresa. Sem partículas (forma "off"): o terminal é o destaque.
+ * Seção 05 — A empresa. Sem partículas (forma "off"): o terminal é o destaque.
  * Ao entrar na tela, o título se decodifica, o comando é digitado letra a letra e os princípios
  * carregam como linhas de um sistema, cada uma confirmada com [ OK ].
  */
@@ -90,7 +105,7 @@ export function About() {
         className="pointer-events-none absolute inset-0 -z-[1] bg-[radial-gradient(45%_50%_at_72%_55%,rgb(200_16_46/0.14),transparent_70%)]"
       />
 
-      <SectionLabel n="01" label="A empresa" desc="Quem desenha e quem programa, do rascunho ao sistema no ar." extra="sys://barros" />
+      <SectionLabel n="05" label="A empresa" desc="Quem desenha e quem programa, do rascunho ao sistema no ar." extra="sys://barros" />
 
       <div className="mt-12 grid gap-12 md:grid-cols-12 md:items-center md:gap-10">
         <div className="md:col-span-5">
@@ -110,6 +125,27 @@ export function About() {
             Sem intermediário e sem surpresa. Do primeiro rascunho ao sistema rodando, quem desenha e quem programa
             estão do seu lado.
           </p>
+
+          {/* quem está por trás (só com a foto preenchida em content/site.ts) */}
+          {founder.photo && (
+            <figure className="mt-10 flex max-w-[460px] items-start gap-5 border-t border-white/10 pt-8">
+              <Image
+                src={founder.photo}
+                alt={founder.name}
+                width={72}
+                height={72}
+                unoptimized
+                className="size-[72px] shrink-0 rounded-full object-cover ring-1 ring-white/15"
+              />
+              <div>
+                <blockquote className="text-[15px] leading-[1.6] font-light text-mist">{founder.quote}</blockquote>
+                <figcaption className="mono-label mt-4 text-ash">
+                  <span className="text-bone">{founder.name}</span>
+                  <span className="block pt-1 text-carmim-light">{founder.role}</span>
+                </figcaption>
+              </div>
+            </figure>
+          )}
         </div>
 
         {/* Terminal com os princípios */}
@@ -151,6 +187,40 @@ export function About() {
           </ol>
         </div>
       </div>
+
+      {/* bastidores: duas fotos desencontradas, como numa revista */}
+      <Reveal className="mt-16 grid md:mt-28 md:grid-cols-12 md:gap-10">
+        {SHOTS.map((s, i) => (
+          <figure key={s.src} className={`group ${s.box} ${s.fig}`}>
+            {/* embaixo a foto colorida; por cima a tratada, que some no hover (ou ao tocar, no celular) */}
+            <div className="relative overflow-hidden rounded-2xl ring-1 ring-white/10">
+              <Image
+                src={s.src.replace(".webp", "-cor.webp")}
+                alt=""
+                aria-hidden
+                width={s.w}
+                height={s.h}
+                sizes={s.sizes}
+                unoptimized
+                className="h-auto w-full"
+              />
+              <Image
+                src={s.src}
+                alt={s.alt}
+                width={s.w}
+                height={s.h}
+                sizes={s.sizes}
+                unoptimized // já tratada e exportada no tamanho certo: recomprimir só tira nitidez e mata o grão
+                className="absolute inset-0 h-full w-full transition-opacity duration-700 ease-out group-hover:opacity-0 motion-reduce:transition-none"
+              />
+            </div>
+            <figcaption className="mono-label mt-3 flex flex-col gap-1 text-ash md:flex-row md:gap-2">
+              <span className="whitespace-nowrap text-carmim-light">(fig. 0{i + 1})</span>
+              {s.caption}
+            </figcaption>
+          </figure>
+        ))}
+      </Reveal>
     </section>
   );
 }

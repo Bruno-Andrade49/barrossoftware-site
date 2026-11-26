@@ -61,7 +61,7 @@ export function Faq() {
     >
       <div className="grid gap-12 md:grid-cols-12">
         <div className="md:col-span-5">
-          <SectionLabel n="05" label="Perguntas" desc="O que mais perguntam antes de começar." rule={false} />
+          <SectionLabel n="06" label="Perguntas" desc="O que mais perguntam antes de começar." rule={false} />
           <h2
             id="perguntas-titulo"
             className="mt-8 text-[clamp(40px,4.6vw,80px)] leading-[0.98] font-medium tracking-[-0.042em]"

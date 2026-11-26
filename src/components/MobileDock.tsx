@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 // Seções da home e o rótulo que aparece no dock (null = dock escondido)
 const SECTIONS: [string, string | null][] = [
   ["inicio", null],
-  ["sobre", "01 — A empresa"],
   ["servicos", "02 — Serviços"],
   ["trabalhos", "03 — Trabalhos"],
   ["processo", "04 — Processo"],
-  ["perguntas", "05 — Perguntas"],
+  ["sobre", "05 — A empresa"],
+  ["perguntas", "06 — Perguntas"],
   ["contato", null],
   ["rodape", null],
 ];

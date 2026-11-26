@@ -16,6 +16,6 @@ try {
       postMessage(!/swiftshader|llvmpipe|softpipe|software|basic render/i.test(name));
     }
   }
-} catch (e) {
+} catch {
   postMessage(null);
 }

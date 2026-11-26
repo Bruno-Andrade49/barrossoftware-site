@@ -38,7 +38,7 @@ export function ContactCTA() {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] md:inset-x-[-4%] md:h-[34%]"
       />
       <Reveal className="relative mx-auto flex w-full max-w-[1100px] flex-col items-center text-center">
-        <SectionLabel n="06" label="Contato" desc="Resposta em até um dia útil, com os próximos passos." center />
+        <SectionLabel n="07" label="Contato" desc="Resposta em até um dia útil, com os próximos passos." center />
 
         <h2
           id="contato-titulo"

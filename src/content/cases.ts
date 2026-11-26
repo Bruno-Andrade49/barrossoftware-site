@@ -49,12 +49,12 @@ export const cases: Case[] = [
   {
     slug: "geoparque-cariri",
     name: "Geoparque Cariri",
-    client: "Geoparque Mundial UNESCO Cariri",
+    client: "Geoparque Cariri",
     type: "Portal institucional",
     year: "2026",
-    summary: "Portal do primeiro geoparque das Américas reconhecido pela UNESCO.",
+    summary: "Portal do Geoparque Cariri: geossítios, roteiros e conteúdo educativo do território.",
     description:
-      "Portal do primeiro geoparque das Américas reconhecido pela UNESCO. Reunimos geossítios, roteiros e conteúdo educativo num site rápido, acessível e que a própria equipe atualiza.",
+      "Portal do Geoparque Cariri. Reunimos geossítios, roteiros e conteúdo educativo num site rápido, acessível e que a própria equipe atualiza.",
     challenge:
       "Reunir geossítios, roteiros e conteúdo educativo num portal rápido, acessível e fácil de atualizar pela equipe.",
     solution:
@@ -78,7 +78,7 @@ export const cases: Case[] = [
     year: "2026",
     summary: "Site da produtora Conecta: vídeo, design, fotografia e cobertura de eventos.",
     description:
-      "Site da Conecta, produtora de vídeo, design, fotografia e cobertura de eventos.", // PREENCHER: o que o site resolveu para a Conecta
+      "Site da Conecta, produtora de vídeo, design e fotografia. Apresenta a equipe e os serviços, mostra o trabalho em vídeo e leva o visitante direto ao pedido de orçamento.",
     challenge: "PREENCHER: o problema que o cliente trouxe.",
     // REVISAR: descrito a partir da gravação do site
     solution:
@@ -98,11 +98,11 @@ export const cases: Case[] = [
     slug: "malu-cookies",
     name: "Malu Cookies",
     client: "Malu Cookies",
-    type: "Loja online",
+    type: "Loja online e painel",
     year: "2026",
     summary: "Loja de cookies artesanais com pedido direto pelo WhatsApp.",
     description:
-      "Loja de cookies artesanais com pedido direto pelo WhatsApp. O carrinho monta o pedido, e a dona atualiza produtos e preços num painel próprio.",
+      "Loja de cookies artesanais com pedido direto pelo WhatsApp, sem taxa de marketplace. O carrinho monta o pedido, e a dona atualiza produtos e preços num painel feito para ela.",
     challenge: "Vender online sem taxa de marketplace e sem complicar a rotina de quem produz.",
     solution:
       "Catálogo com carrinho que monta o pedido e envia pelo WhatsApp, mais um painel para a dona atualizar produtos e preços.",
