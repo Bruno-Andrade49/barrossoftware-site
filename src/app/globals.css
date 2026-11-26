@@ -451,6 +451,14 @@ html {
   padding: 0.1em 0.06em 0.18em;
   margin: -0.1em -0.06em -0.18em;
 }
+/* a linha mantém a altura mesmo vazia (enquanto a palavra é apagada e redigitada): nada abaixo dela pula */
+.line-mask > .block::after {
+  content: "\200b";
+}
+/* a linha mantém a altura mesmo vazia (enquanto a palavra é apagada e redigitada): nada abaixo dela pula */
+.line-mask > .block::after {
+  content: "b";
+}
 
 /* Indicador "role para explorar" */
 .scroll-cue {

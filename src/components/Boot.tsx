@@ -146,17 +146,26 @@ export function Boot() {
 
         <div className="flex flex-1 flex-col items-center justify-center">
           <div className="flex max-w-full flex-col">
-            <p className="flex h-[1em] items-center text-[clamp(44px,11vw,104px)] leading-none tracking-[-0.035em] [font-family:var(--font-display)]">
-              <span ref={a} className="font-bold" />
-              <span
-                ref={caret}
-                className="logo-caret mx-[0.07em] inline-block shrink-0 h-[0.8em] w-[0.075em] translate-y-[0.04em] bg-carmim"
-              />
-              <span ref={b} className="font-light" />
-              <span
-                ref={caretEnd}
-                className="logo-caret is-typing ml-[0.07em] hidden shrink-0 h-[0.8em] w-[0.075em] translate-y-[0.04em] bg-carmim"
-              />
+            {/* a marca completa, invisível, reserva a largura: o bloco não se desloca enquanto ela é digitada */}
+            <p className="grid text-[clamp(44px,11vw,104px)] leading-none tracking-[-0.035em] [font-family:var(--font-display)]">
+              <span className="invisible col-start-1 row-start-1 flex h-[1em] items-center" aria-hidden="true">
+                <span className="font-bold">{WORD[0]}</span>
+                <span className="mx-[0.07em] inline-block h-[0.8em] w-[0.075em] shrink-0" />
+                <span className="font-light">{WORD[1]}</span>
+                <span className="ml-[0.07em] inline-block h-[0.8em] w-[0.075em] shrink-0" />
+              </span>
+              <span className="col-start-1 row-start-1 flex h-[1em] items-center">
+                <span ref={a} className="font-bold" />
+                <span
+                  ref={caret}
+                  className="logo-caret mx-[0.07em] inline-block shrink-0 h-[0.8em] w-[0.075em] translate-y-[0.04em] bg-carmim"
+                />
+                <span ref={b} className="font-light" />
+                <span
+                  ref={caretEnd}
+                  className="logo-caret is-typing ml-[0.07em] hidden shrink-0 h-[0.8em] w-[0.075em] translate-y-[0.04em] bg-carmim"
+                />
+              </span>
             </p>
 
             <ol className="boot-log mt-8 flex flex-col gap-1.5 font-[family-name:var(--font-mono)] text-[11px] tracking-[0.06em] uppercase md:mt-10 md:text-[12px]">

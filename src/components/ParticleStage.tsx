@@ -339,16 +339,32 @@ export function ParticleStage() {
     const el = host.current;
     if (!el) return;
 
+    // Sem placa de vídeo de verdade (o navegador desenha por software: SwiftShader, llvmpipe), o WebGL
+    // roda na CPU e disputa com a página. Nesse caso o palco fica mais leve: menos partículas, sem
+    // antialias, resolução 1× e 30 quadros/s.
     let renderer: THREE.WebGLRenderer;
+    let soft = false;
+    const opts = { alpha: true, powerPreference: "high-performance" as const };
     try {
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+      renderer = new THREE.WebGLRenderer({ ...opts, antialias: true, failIfMajorPerformanceCaveat: true });
     } catch {
-      return;
+      soft = true;
+      try {
+        renderer = new THREE.WebGLRenderer({ ...opts, antialias: false });
+      } catch {
+        return;
+      }
+    }
+    if (!soft) {
+      const gl = renderer.getContext();
+      const info = gl.getExtension("WEBGL_debug_renderer_info");
+      const gpu = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : "";
+      soft = /swiftshader|llvmpipe|softpipe|software|basic render/i.test(gpu);
     }
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const small = window.innerWidth < 768;
     // no celular, 1.5× já deixa as linhas finas nítidas e poupa a GPU (e a bateria)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, small ? 1.5 : 2));
+    renderer.setPixelRatio(soft ? 1 : Math.min(window.devicePixelRatio, small ? 1.5 : 2));
     renderer.setClearColor(0x000000, 0);
     renderer.domElement.style.display = "block";
     el.appendChild(renderer.domElement);
@@ -358,7 +374,7 @@ export function ParticleStage() {
     const half = new THREE.Vector2(1.6, 1);
 
     // --- Simulação ---
-    const SIZE = small ? 84 : 168;
+    const SIZE = soft ? (small ? 48 : 96) : small ? 84 : 168;
     const COUNT = SIZE * SIZE;
     const gpgpu = new GPUComputationRenderer(SIZE, SIZE, renderer);
     if (!renderer.extensions.has("EXT_color_buffer_float")) gpgpu.setDataType(THREE.HalfFloatType);
@@ -598,6 +614,9 @@ export function ParticleStage() {
     const prevA = new THREE.Vector2(NaN, NaN);
     const prevB = new THREE.Vector2(NaN, NaN);
 
+    let seen = -1;
+    let pickScroll = NaN;
+    let pickAt = -1;
     const step = (dt: number, t: number) => {
       if (started < 0) started = t;
       recollect += dt;
@@ -618,7 +637,13 @@ export function ParticleStage() {
 
       // a seção nova precisa ficar estável por um instante antes da troca: num scroll rápido as seções
       // do meio são puladas, em vez de disparar várias travessias uma por cima da outra
-      const seen = pickActive();
+      // ler a posição das seções força o navegador a recalcular o layout: com a página parada,
+      // basta conferir duas vezes por segundo
+      if (window.scrollY !== pickScroll || t - pickAt > 0.5) {
+        pickScroll = window.scrollY;
+        pickAt = t;
+        seen = pickActive();
+      }
       if (seen !== pending) {
         pending = seen;
         pendingSince = t;
@@ -681,8 +706,11 @@ export function ParticleStage() {
       }
     };
 
-    const tick = () => {
+    let lastFrame = 0;
+    const tick = (now = 0) => {
       raf = requestAnimationFrame(tick);
+      if (soft && now - lastFrame < 31) return; // 30 quadros/s quando o desenho é por software
+      lastFrame = now;
       const dt = Math.min(clock.getDelta(), 1 / 30);
       // tempo da simulação (não do relógio): com a aba lenta, a travessia anda no mesmo ritmo das partículas
       simTime += dt;

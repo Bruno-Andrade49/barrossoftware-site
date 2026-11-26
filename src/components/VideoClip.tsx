@@ -5,7 +5,8 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 type Props = { src: string; poster: string; label: string; className?: string; style?: CSSProperties };
 
 /**
- * Vídeo mudo em loop que só toca quando está visível (e pausa fora da tela).
+ * Vídeo mudo em loop que só baixa quando chega perto da tela e só toca quando está visível
+ * (pausa fora dela). Escondido (display: none, como a versão de computador no celular), não baixa nunca.
  * A capa é uma imagem por cima (e não o atributo poster): o Safari ignora o object-fit
  * no poster e estica a imagem. Vídeo e capa preenchem a caixa sem distorcer (object-cover);
  * quem usa define a proporção da caixa igual à da gravação.
@@ -13,6 +14,23 @@ type Props = { src: string; poster: string; label: string; className?: string; s
 export function VideoClip({ src, poster, label, className = "", style }: Props) {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [near, setNear] = useState(false);
+
+  // o arquivo só é pedido quando o vídeo está a menos de uma tela de distância
+  useEffect(() => {
+    const v = ref.current;
+    if (!v || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        setNear(true);
+        io.disconnect();
+      },
+      { rootMargin: "100% 100%" },
+    );
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     const v = ref.current;
@@ -44,12 +62,12 @@ export function VideoClip({ src, poster, label, className = "", style }: Props) 
     <div role="img" aria-label={label} className={`relative overflow-hidden bg-[#000] ${className}`} style={style}>
       <video
         ref={ref}
-        src={src}
+        src={near ? src : undefined}
         aria-hidden="true"
         muted
         loop
         playsInline
-        preload="metadata"
+        preload={near ? "auto" : "none"}
         onPlaying={() => setPlaying(true)}
         className="absolute inset-0 size-full object-cover"
       />
